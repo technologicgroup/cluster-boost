@@ -5,10 +5,9 @@ import com.technologicgroup.gridgain.core.Cluster;
 
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCheckedException;
-import org.apache.ignite.IgniteSpring;
+import org.apache.ignite.Ignition;
 import org.apache.ignite.configuration.IgniteConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -28,23 +27,30 @@ public class Config {
   private Cluster cluster;
 
   @Bean
-  public Ignite ignite(ApplicationContext context) throws IgniteCheckedException {
+  public Ignite ignite() throws IgniteCheckedException {
     IgniteConfiguration cfg = new IgniteConfiguration();
 //    IgniteLogger log = new Slf4jLogger();
 //    cfg.setGridLogger(log);
-    return IgniteSpring.start(cfg, context);
+    return Ignition.start(cfg);
   }
 
   @PostConstruct
-  public void init() throws InterruptedException {
+  public void init() {
     log.info("TEST 1");
 
     cluster.setOnClusterReadyListener(() -> log.info("TEST 2"));
-    cluster.waitForReady();
-    cluster.run(() -> log.info("TEST 3"));
 
     // Must release context creation before run the bean
-    CompletableFuture.runAsync(() -> cluster.runBean(RunnableBean.class));
+    CompletableFuture.runAsync(() -> {
+      try {
+        cluster.waitForReady();
+
+        cluster.run(() -> log.info("TEST 3"));
+        cluster.runBean(RunnableBean.class);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    });
   }
 
 }

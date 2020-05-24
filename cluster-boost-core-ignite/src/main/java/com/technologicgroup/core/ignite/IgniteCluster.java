@@ -74,7 +74,7 @@ class IgniteCluster implements Cluster {
 
   @Override
   public boolean isActivated() {
-    return ignite.cluster().active();
+    return ignite.cluster().active() && Activator.isReady();
   }
 
   @Override

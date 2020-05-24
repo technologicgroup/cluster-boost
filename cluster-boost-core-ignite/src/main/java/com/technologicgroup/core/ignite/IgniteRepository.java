@@ -9,6 +9,7 @@ import org.apache.ignite.cache.CacheMode;
 import org.apache.ignite.cache.CachePeekMode;
 import org.apache.ignite.cache.affinity.Affinity;
 import org.apache.ignite.configuration.CacheConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.ParameterizedType;
@@ -20,17 +21,12 @@ import java.util.stream.Collectors;
 
 import javax.cache.Cache;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 @Repository
-@NoArgsConstructor
 public abstract class IgniteRepository<K, V> implements ClusterRepository<K, V> {
 
   private CacheConfiguration<K, V> configuration;
 
-  @Setter(value = AccessLevel.PACKAGE)
+  @Autowired
   private Ignite ignite;
 
   synchronized CacheConfiguration<K, V> getConfiguration() {
@@ -64,7 +60,7 @@ public abstract class IgniteRepository<K, V> implements ClusterRepository<K, V> 
   }
 
   private IgniteCache<K, V> cache() {
-    return ignite.cache(configuration.getName());
+    return ignite.cache(getConfiguration().getName());
   }
 
   private Iterable<Cache.Entry<K, V>> getAllLocalIterable() {
@@ -97,7 +93,7 @@ public abstract class IgniteRepository<K, V> implements ClusterRepository<K, V> 
     return null;
   }
 
-  public Map<K, V> getAllLocal(Set<K> keys) {
+  public Map<K, V> getLocal(Set<K> keys) {
     Map<K, V> result = new HashMap<>();
 
     for (Cache.Entry<K, V> entry : getAllLocalIterable()) {
@@ -108,6 +104,16 @@ public abstract class IgniteRepository<K, V> implements ClusterRepository<K, V> 
 
     return result;
   }
+
+  public Map<K, V> getAllLocal() {
+    Map<K, V> result = new HashMap<>();
+    for (Cache.Entry<K, V> entry : getAllLocalIterable()) {
+      result.put(entry.getKey(), entry.getValue());
+    }
+
+    return result;
+  }
+
 
   public void put(K key, V value) {
     cache().put(key, value);

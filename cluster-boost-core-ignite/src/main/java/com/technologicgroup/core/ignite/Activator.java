@@ -1,18 +1,30 @@
 package com.technologicgroup.core.ignite;
 
-import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 
 @Configuration
-@AllArgsConstructor
-public class Activator {
+class Activator {
 
-  @Lazy
-  private final IgniteCluster cluster;
+  @Getter
+  static IgniteCluster cluster;
 
-  @Lazy
-  private final ApplicationContext context;
+  @Getter
+  static ApplicationContext context;
 
+  private static final Object locker = new Object();
+
+  public Activator(IgniteCluster cluster, ApplicationContext context) {
+    synchronized (locker) {
+      Activator.cluster = cluster;
+      Activator.context = context;
+    }
+  }
+
+  public static boolean isReady() {
+    synchronized (locker) {
+      return cluster != null && context != null;
+    }
+  }
 }

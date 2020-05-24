@@ -7,7 +7,6 @@ import org.apache.ignite.configuration.CacheConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -16,11 +15,10 @@ import java.util.concurrent.CompletableFuture;
 public class IgniteRepositoryConfig {
 
   @Bean
-  public Cluster igniteCluster(@Lazy Ignite ignite, IgniteRepository<?, ?>[] repositories) {
+  public Cluster igniteCluster(Ignite ignite, IgniteRepository<?, ?>[] repositories) {
     for (IgniteRepository<?, ?> repository : repositories) {
       CacheConfiguration<?, ?> configuration = repository.getConfiguration();
       ignite.getOrCreateCache(configuration);
-      repository.setIgnite(ignite);
     }
 
     IgniteCluster igniteCluster = new IgniteCluster(ignite);
@@ -40,6 +38,5 @@ public class IgniteRepositoryConfig {
 
     cluster.setIsReady();
   }
-
 
 }

@@ -1,4 +1,4 @@
-package com.technologicgroup.cluster.testapp;
+package com.technologicgroup.cluster.testapp.domain;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package com.technologicgroup.cluster.testapp;
+package com.technologicgroup.cluster.testapp.domain;
 
 import com.technologicgroup.core.ignite.IgniteRepository;
 
