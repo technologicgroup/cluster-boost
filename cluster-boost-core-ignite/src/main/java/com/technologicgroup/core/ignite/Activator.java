@@ -1,22 +1,18 @@
 package com.technologicgroup.core.ignite;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
-
-import javax.annotation.PostConstruct;
+import org.springframework.context.annotation.Lazy;
 
 @Configuration
+@AllArgsConstructor
 public class Activator {
 
-  @Autowired
-  private IgniteCluster cluster;
+  @Lazy
+  private final IgniteCluster cluster;
 
-  @Autowired
-  private ApplicationContext context;
-
-  @PostConstruct
-  public void init() {
-  }
+  @Lazy
+  private final ApplicationContext context;
 
 }

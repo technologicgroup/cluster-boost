@@ -11,8 +11,8 @@ public interface Cluster {
   void runAsync(ClusterGroup clusterGroup, ClusterCall job);
   void runAsync(ClusterCall job);
 
-  void runBean(ClusterGroup clusterGroup, Class<Runnable> bean);
-  void runBean(Class<Runnable> bean);
+  <R extends Runnable> void runBean(ClusterGroup clusterGroup, Class<R> bean);
+  <R extends Runnable> void runBean(Class<R> bean);
 
   boolean isActivated();
 

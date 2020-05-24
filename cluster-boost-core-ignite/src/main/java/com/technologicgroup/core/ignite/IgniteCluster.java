@@ -21,8 +21,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class IgniteCluster implements Cluster {
   private final Ignite ignite;
-  private CountDownLatch readyLatch = new CountDownLatch(1);
 
+  CountDownLatch readyLatch = new CountDownLatch(1);
   OnClusterReadyListener listener;
 
   private org.apache.ignite.cluster.ClusterGroup mapClusterGroup(ClusterGroup clusterGroup) {
@@ -63,13 +63,13 @@ class IgniteCluster implements Cluster {
   }
 
   @Override
-  public void runBean(ClusterGroup clusterGroup, Class<Runnable> bean) {
-    ignite.compute(mapClusterGroup(clusterGroup)).run(new ClusterBeanProvider(bean));
+  public <R extends Runnable> void runBean(ClusterGroup clusterGroup, Class<R> bean) {
+    ignite.compute(mapClusterGroup(clusterGroup)).run(new ClusterBeanProvider<>(bean));
   }
 
   @Override
-  public void runBean(Class<Runnable> bean) {
-    ignite.compute().run(new ClusterBeanProvider(bean));
+  public <R extends Runnable> void runBean(Class<R> bean) {
+    ignite.compute().run(new ClusterBeanProvider<>(bean));
   }
 
   @Override

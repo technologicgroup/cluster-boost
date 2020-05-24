@@ -1,0 +1,5 @@
+*.iml
+.idea
+cluster-boost-core-ignite/target
+cluster-boost-core/target
+testapp/target
