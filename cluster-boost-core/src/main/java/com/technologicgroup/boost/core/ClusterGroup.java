@@ -1,4 +1,4 @@
-package com.technologicgroup.gridgain.core;
+package com.technologicgroup.boost.core;
 
 import java.util.List;
 
@@ -6,5 +6,5 @@ import lombok.Value;
 
 @Value
 public class ClusterGroup {
-  private List<String> nodes;
+  List<String> nodes;
 }

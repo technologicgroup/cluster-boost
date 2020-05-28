@@ -1,4 +1,4 @@
-package com.technologicgroup.core.ignite;
+package com.technologicgroup.boost.common;
 
 import lombok.Getter;
 import org.springframework.context.ApplicationContext;

@@ -1,6 +1,6 @@
-package com.technologicgroup.core.ignite;
+package com.technologicgroup.boost.common;
 
-import com.technologicgroup.gridgain.core.Cluster;
+import com.technologicgroup.boost.core.Cluster;
 
 import org.apache.ignite.Ignite;
 import org.apache.ignite.configuration.CacheConfiguration;

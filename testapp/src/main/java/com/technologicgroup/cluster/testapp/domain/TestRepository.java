@@ -1,6 +1,6 @@
 package com.technologicgroup.cluster.testapp.domain;
 
-import com.technologicgroup.core.ignite.IgniteRepository;
+import com.technologicgroup.boost.common.IgniteRepository;
 
 import org.springframework.stereotype.Repository;
 

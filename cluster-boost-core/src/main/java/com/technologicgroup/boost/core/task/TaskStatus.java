@@ -1,4 +1,4 @@
-package com.technologicgroup.gridgain.core.task;
+package com.technologicgroup.boost.core.task;
 
 public enum TaskStatus {
   CREATED,

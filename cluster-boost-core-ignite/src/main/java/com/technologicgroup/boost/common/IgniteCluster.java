@@ -1,10 +1,10 @@
-package com.technologicgroup.core.ignite;
+package com.technologicgroup.boost.common;
 
-import com.technologicgroup.gridgain.core.Cluster;
-import com.technologicgroup.gridgain.core.ClusterCall;
-import com.technologicgroup.gridgain.core.ClusterGroup;
-import com.technologicgroup.gridgain.core.ClusterJob;
-import com.technologicgroup.gridgain.core.OnClusterReadyListener;
+import com.technologicgroup.boost.core.Cluster;
+import com.technologicgroup.boost.core.ClusterCall;
+import com.technologicgroup.boost.core.ClusterGroup;
+import com.technologicgroup.boost.core.ClusterJob;
+import com.technologicgroup.boost.core.OnClusterReadyListener;
 
 import org.apache.ignite.Ignite;
 import org.springframework.stereotype.Service;

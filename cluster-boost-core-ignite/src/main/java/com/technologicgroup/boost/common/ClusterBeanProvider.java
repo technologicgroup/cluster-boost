@@ -1,4 +1,4 @@
-package com.technologicgroup.core.ignite;
+package com.technologicgroup.boost.common;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

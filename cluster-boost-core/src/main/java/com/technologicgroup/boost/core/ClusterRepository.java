@@ -1,4 +1,4 @@
-package com.technologicgroup.gridgain.core;
+package com.technologicgroup.boost.core;
 
 import java.util.Map;
 import java.util.Set;

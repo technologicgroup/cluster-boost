@@ -1,4 +1,4 @@
-package com.technologicgroup.gridgain.core;
+package com.technologicgroup.boost.core;
 
 public interface ClusterCall extends Runnable {
 
