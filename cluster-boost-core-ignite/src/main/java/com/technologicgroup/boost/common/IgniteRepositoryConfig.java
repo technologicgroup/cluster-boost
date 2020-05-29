@@ -15,8 +15,8 @@ import java.util.concurrent.CompletableFuture;
 public class IgniteRepositoryConfig {
 
   @Bean
-  public Cluster igniteCluster(Ignite ignite, IgniteRepository<?, ?>[] repositories) {
-    for (IgniteRepository<?, ?> repository : repositories) {
+  public Cluster igniteCluster(Ignite ignite, CommonRepository<?, ?>[] repositories) {
+    for (CommonRepository<?, ?> repository : repositories) {
       CacheConfiguration<?, ?> configuration = repository.getConfiguration();
       ignite.getOrCreateCache(configuration);
     }
@@ -27,6 +27,7 @@ public class IgniteRepositoryConfig {
     return igniteCluster;
   }
 
+  @SuppressWarnings("BusyWait")
   private void startActivation(IgniteCluster cluster) {
     while (!cluster.isActivated()) {
       try {

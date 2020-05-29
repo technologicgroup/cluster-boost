@@ -1,10 +1,10 @@
 package com.technologicgroup.cluster.testapp.domain;
 
-import com.technologicgroup.boost.common.IgniteRepository;
+import com.technologicgroup.boost.common.CommonRepository;
 
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class TestRepository extends IgniteRepository<TestKey, TestValue> {
+public class TestRepository extends CommonRepository<TestKey, TestValue> {
 
 }

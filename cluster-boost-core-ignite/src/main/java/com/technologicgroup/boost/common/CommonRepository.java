@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 import javax.cache.Cache;
 
 @Repository
-public abstract class IgniteRepository<K, V> implements ClusterRepository<K, V> {
+public abstract class CommonRepository<K, V> implements ClusterRepository<K, V> {
 
   private CacheConfiguration<K, V> configuration;
 
@@ -68,10 +68,10 @@ public abstract class IgniteRepository<K, V> implements ClusterRepository<K, V> 
   }
 
   public ClusterGroup getClusterGroup(ClusterRepository<K, V> repository) {
-    IgniteRepository<K, V> igniteRepository = (IgniteRepository<K, V>)repository;
+    CommonRepository<K, V> commonRepository = (CommonRepository<K, V>)repository;
 
     org.apache.ignite.cluster.ClusterGroup
-        clusterGroup = ignite.cluster().forCacheNodes(igniteRepository.cache().getName());
+        clusterGroup = ignite.cluster().forCacheNodes(commonRepository.cache().getName());
 
     return new ClusterGroup(clusterGroup.nodes().stream().map(n -> n.id().toString()).collect(Collectors
                                                                                                   .toList()));
@@ -113,7 +113,6 @@ public abstract class IgniteRepository<K, V> implements ClusterRepository<K, V> 
 
     return result;
   }
-
 
   public void put(K key, V value) {
     cache().put(key, value);

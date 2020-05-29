@@ -33,43 +33,55 @@ class IgniteCluster implements Cluster {
   }
 
   @Override
-  public <R> R run(ClusterGroup clusterGroup, ClusterJob<R> job) {
-    return ignite.compute(mapClusterGroup(clusterGroup)).call(job::run);
+  public <R> Collection<R> run(ClusterGroup clusterGroup, ClusterJob<R> job) {
+    return ignite.compute(mapClusterGroup(clusterGroup)).broadcast(job::run);
+  }
+
+  @Override
+  public <R> Collection<R> run(ClusterJob<R> job) {
+    return ignite.compute().broadcast(job::run);
   }
 
   @Override
   public void run(ClusterGroup clusterGroup, ClusterCall job) {
-    ignite.compute(mapClusterGroup(clusterGroup)).run(job::run);
-  }
-
-  @Override
-  public <R> R run(ClusterJob<R> job) {
-    return ignite.compute().call(job::run);
+    ignite.compute(mapClusterGroup(clusterGroup)).broadcast(job::run);
   }
 
   @Override
   public void run(ClusterCall job) {
-    ignite.compute().run(job::run);
+    ignite.compute().broadcast(job::run);
   }
 
   @Override
   public synchronized void runAsync(ClusterGroup clusterGroup, ClusterCall job) {
-    ignite.compute(mapClusterGroup(clusterGroup)).runAsync(job::run);
+    ignite.compute(mapClusterGroup(clusterGroup)).broadcastAsync(job::run);
   }
 
   @Override
   public synchronized void runAsync(ClusterCall job) {
-    ignite.compute().runAsync(job::run);
+    ignite.compute().broadcastAsync(job::run);
   }
 
   @Override
-  public <R extends Runnable> void runBean(ClusterGroup clusterGroup, Class<R> bean) {
-    ignite.compute(mapClusterGroup(clusterGroup)).run(new ClusterBeanProvider<>(bean));
+  public <R extends Runnable> void runBeanAsync(ClusterGroup clusterGroup, Class<R> bean) {
+    ignite.compute(mapClusterGroup(clusterGroup)).broadcastAsync(new ClusterBeanProvider<>(bean));
   }
 
   @Override
-  public <R extends Runnable> void runBean(Class<R> bean) {
-    ignite.compute().run(new ClusterBeanProvider<>(bean));
+  public <R extends Runnable> void runBeanAsync(Class<R> bean) {
+    ignite.compute().broadcastAsync(new ClusterBeanProvider<>(bean));
+  }
+
+  @Override
+  public <R extends Runnable> Collection<R> runBean(ClusterGroup clusterGroup, Class<R> bean) {
+    ignite.compute(mapClusterGroup(clusterGroup)).broadcast(new ClusterBeanProvider<>(bean));
+    return null;
+  }
+
+  @Override
+  public <R extends Runnable> Collection<R> runBean(Class<R> bean) {
+    ignite.compute().broadcast(new ClusterBeanProvider<>(bean));
+    return null;
   }
 
   @Override
