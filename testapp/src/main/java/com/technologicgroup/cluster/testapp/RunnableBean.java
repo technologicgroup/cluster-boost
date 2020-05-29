@@ -16,6 +16,8 @@ public class RunnableBean implements Runnable {
 
   @Override
   public void run() {
+    log.info("TEST run bean");
+
     int size = testRepository.getAllLocal().size();
     log.info("Runnable executed, items found on node: {}", size);
 
