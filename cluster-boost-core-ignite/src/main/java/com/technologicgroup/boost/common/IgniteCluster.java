@@ -109,7 +109,7 @@ class IgniteCluster implements Cluster {
   }
 
   @SuppressWarnings("BusyWait")
-  void startActivation() {
+  void activate() {
     if (isFirstNode()) {
       while (!checkActivationForAllNodes()) {
         try {
@@ -147,6 +147,7 @@ class IgniteCluster implements Cluster {
   }
 
   synchronized void setIsReady() {
+    activated = true;
     readyLatch.countDown();
     Optional.ofNullable(listener).ifPresent(OnClusterReadyListener::onClusterReady);
     listener = null;

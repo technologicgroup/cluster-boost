@@ -40,7 +40,7 @@ public class RepositoryConfig {
     ignite.cluster().restartNodes();
 
     IgniteCluster igniteCluster = new IgniteCluster(ignite, hosts);
-    CompletableFuture.runAsync(igniteCluster::startActivation);
+    CompletableFuture.runAsync(igniteCluster::activate);
 
     return igniteCluster;
   }
