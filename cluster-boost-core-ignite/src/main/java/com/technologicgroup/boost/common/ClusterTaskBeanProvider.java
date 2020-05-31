@@ -8,20 +8,20 @@ import org.apache.ignite.lang.IgniteCallable;
 @Slf4j
 @AllArgsConstructor
 class ClusterTaskBeanProvider<A, R, T extends ClusterTask<A, R>> implements IgniteCallable<R> {
-    private final Class<T> beanClass;
-    private final A arg;
+  private final Class<T> beanClass;
+  private final A arg;
 
-    private T getBean() {
+  private T getBean() {
         return Activator.getContext().getBean(beanClass);
     }
 
-    @Override
-    public R call() {
-        try {
-            return getBean().run(arg);
-        } catch (Throwable th) {
-            log.error(th.getMessage(), th);
-            throw th;
-        }
+  @Override
+  public R call() {
+    try {
+      return getBean().run(arg);
+    } catch (Throwable th) {
+      log.error(th.getMessage(), th);
+      throw th;
     }
+  }
 }

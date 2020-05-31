@@ -20,8 +20,11 @@ import lombok.RequiredArgsConstructor;
 class IgniteCluster implements Cluster {
   private final Ignite ignite;
   private final String[] hosts;
+  private final int startupTimeout;
 
   private volatile boolean activated;
+
+  private static final int DEFAULT_SLEEP_INTERVAL = 100;
 
   CountDownLatch readyLatch = new CountDownLatch(1);
   OnClusterReadyListener listener;
@@ -123,14 +126,16 @@ class IgniteCluster implements Cluster {
   @SuppressWarnings("BusyWait")
   void activate() {
     if (isFirstNode()) {
+      int waitTime = 0;
       while (!checkActivationForAllNodes()) {
         try {
-          Thread.sleep(100);
+          Thread.sleep(DEFAULT_SLEEP_INTERVAL);
         } catch (InterruptedException e) {
           throw new RuntimeException(e);
-        } catch (Throwable th) {
-          log.error("Cluster activation error: {}", th.getMessage(), th);
-          throw th;
+        }
+        waitTime += DEFAULT_SLEEP_INTERVAL;
+        if (waitTime >= startupTimeout) {
+          throw new RuntimeException("Cluster startup timed out");
         }
       }
       execute(this::setIsReady);
