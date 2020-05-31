@@ -21,6 +21,6 @@ public class RunnableBean implements Runnable {
     int size = testRepository.getAllLocal().size();
     log.info("Runnable executed, items found on node: {}", size);
 
-    cluster.run(() -> log.info("You can call cluster from the bean as well"));
+    cluster.execute(() -> log.info("You can call cluster from the bean as well"));
   }
 }

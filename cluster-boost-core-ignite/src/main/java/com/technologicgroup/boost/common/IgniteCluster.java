@@ -30,13 +30,6 @@ class IgniteCluster implements Cluster {
   CountDownLatch readyLatch = new CountDownLatch(1);
   OnClusterReadyListener listener;
 
-  private org.apache.ignite.cluster.ClusterGroup mapClusterGroup(ClusterGroup clusterGroup) {
-    Collection<UUID> collection = clusterGroup.getNodes().stream().map(UUID::fromString)
-        .collect(Collectors.toList());
-
-    return ignite.cluster().forNodeIds(collection);
-  }
-
   @Override
   public <R> Collection<R> run(ClusterGroup clusterGroup, ClusterJob<R> job) {
     return ignite.compute(mapClusterGroup(clusterGroup)).broadcast(job::run);
@@ -48,45 +41,53 @@ class IgniteCluster implements Cluster {
   }
 
   @Override
-  public void run(ClusterGroup clusterGroup, ClusterCall job) {
+  public void execute(ClusterGroup clusterGroup, ClusterCall job) {
     ignite.compute(mapClusterGroup(clusterGroup)).broadcast(job::run);
   }
 
   @Override
-  public void run(ClusterCall job) {
+  public void execute(ClusterCall job) {
     ignite.compute().broadcast(job::run);
   }
 
   @Override
-  public synchronized void runAsync(ClusterGroup clusterGroup, ClusterCall job) {
+  public synchronized void executeAsync(ClusterGroup clusterGroup, ClusterCall job) {
     ignite.compute(mapClusterGroup(clusterGroup)).broadcastAsync(job::run);
   }
 
   @Override
-  public synchronized void runAsync(ClusterCall job) {
+  public synchronized void executeAsync(ClusterCall job) {
     ignite.compute().broadcastAsync(job::run);
   }
 
   @Override
-  public <R extends Runnable> void runBeanAsync(ClusterGroup clusterGroup, Class<R> bean) {
-    ignite.compute(mapClusterGroup(clusterGroup)).broadcastAsync(new ClusterBeanProvider<>(bean));
+  public <T extends Runnable> void executeBeanAsync(ClusterGroup clusterGroup, Class<T> bean) {
+    ignite.compute(mapClusterGroup(clusterGroup)).broadcastAsync(new RunnableBeanProvider<>(bean));
   }
 
   @Override
-  public <R extends Runnable> void runBeanAsync(Class<R> bean) {
-    ignite.compute().broadcastAsync(new ClusterBeanProvider<>(bean));
+  public <T extends Runnable> void executeBeanAsync(Class<T> bean) {
+    ignite.compute().broadcastAsync(new RunnableBeanProvider<>(bean));
   }
 
   @Override
-  public <R extends Runnable> Collection<R> runBean(ClusterGroup clusterGroup, Class<R> bean) {
-    ignite.compute(mapClusterGroup(clusterGroup)).broadcast(new ClusterBeanProvider<>(bean));
-    return null;
+  public <T extends Runnable> void executeBean(ClusterGroup clusterGroup, Class<T> bean) {
+    ignite.compute(mapClusterGroup(clusterGroup)).broadcast(new RunnableBeanProvider<>(bean));
   }
 
   @Override
-  public <R extends Runnable> Collection<R> runBean(Class<R> bean) {
-    ignite.compute().broadcast(new ClusterBeanProvider<>(bean));
-    return null;
+  public <T extends Runnable> void executeBean(Class<T> bean) {
+    ignite.compute().broadcast(new RunnableBeanProvider<>(bean));
+  }
+
+  @Override
+  public <R, T extends ClusterJob<R>> Collection<R> runBean(ClusterGroup clusterGroup, Class<T> bean) {
+    return ignite.compute(mapClusterGroup(clusterGroup)).broadcast(new ClusterJobBeanProvider<>(bean));
+  }
+
+  @Override
+  public <R, T extends ClusterJob<R>> Collection<R> runBean(Class<T> bean) {
+    return ignite.compute().broadcast(new ClusterJobBeanProvider<>(bean));
   }
 
   @Override
@@ -121,8 +122,15 @@ class IgniteCluster implements Cluster {
           throw th;
         }
       }
-      run(this::setIsReady);
+      execute(this::setIsReady);
     }
+  }
+
+  private org.apache.ignite.cluster.ClusterGroup mapClusterGroup(ClusterGroup clusterGroup) {
+    Collection<UUID> collection = clusterGroup.getNodes().stream().map(UUID::fromString)
+            .collect(Collectors.toList());
+
+    return ignite.cluster().forNodeIds(collection);
   }
 
   private boolean isFirstNode() {

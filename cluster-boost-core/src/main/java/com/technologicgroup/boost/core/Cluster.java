@@ -7,17 +7,20 @@ public interface Cluster {
   <R> Collection<R> run(ClusterGroup clusterGroup, ClusterJob<R> job);
   <R> Collection<R> run(ClusterJob<R> job);
 
-  void run(ClusterGroup clusterGroup, ClusterCall job);
-  void run(ClusterCall job);
+  void execute(ClusterGroup clusterGroup, ClusterCall job);
+  void execute(ClusterCall job);
 
-  void runAsync(ClusterGroup clusterGroup, ClusterCall job);
-  void runAsync(ClusterCall job);
+  void executeAsync(ClusterGroup clusterGroup, ClusterCall job);
+  void executeAsync(ClusterCall job);
 
-  <R extends Runnable> void runBeanAsync(ClusterGroup clusterGroup, Class<R> bean);
-  <R extends Runnable> void runBeanAsync(Class<R> bean);
+  <T extends Runnable> void executeBeanAsync(Class<T> bean);
+  <T extends Runnable> void executeBeanAsync(ClusterGroup clusterGroup, Class<T> bean);
 
-  <R extends Runnable> Collection<R> runBean(ClusterGroup clusterGroup, Class<R> bean);
-  <R extends Runnable> Collection<R> runBean(Class<R> bean);
+  <T extends Runnable> void executeBean(Class<T> bean);
+  <T extends Runnable> void executeBean(ClusterGroup clusterGroup, Class<T> bean);
+
+  <R, T extends ClusterJob<R>> Collection<R> runBean(Class<T> bean);
+  <R, T extends ClusterJob<R>> Collection<R> runBean(ClusterGroup clusterGroup, Class<T> bean);
 
   boolean isActivated();
 
