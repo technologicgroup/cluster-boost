@@ -18,16 +18,12 @@ public class ClusterReadyListener implements OnClusterReadyListener {
 
   @Override
   public void onClusterReady() {
-    try {
-      cluster.waitForReady();
+    log.info("Cluster is ready");
 
-      testRepository.put(new TestKey(0), new TestValue("0"));
-      testRepository.put(new TestKey(1), new TestValue("1"));
+    testRepository.put(new TestKey(0), new TestValue("0"));
+    testRepository.put(new TestKey(1), new TestValue("1"));
 
-      cluster.execute(() -> log.info("TEST Cluster run"));
-      cluster.executeBean(RunnableBean.class);
-    } catch (InterruptedException e) {
-        e.printStackTrace();
-    }
+    cluster.execute(() -> log.info("TEST Cluster run"));
+    cluster.executeBean(RunnableBean.class);
   }
 }
