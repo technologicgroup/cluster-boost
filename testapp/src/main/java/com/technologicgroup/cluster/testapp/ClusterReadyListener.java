@@ -20,10 +20,15 @@ public class ClusterReadyListener implements OnClusterReadyListener {
   public void onClusterReady() {
     log.info("Cluster is ready");
 
-    testRepository.put(new TestKey(0), new TestValue("0"));
-    testRepository.put(new TestKey(1), new TestValue("1"));
+    long nodeOrder = cluster.getNodeOrder();
+    int idPrefix = (int) (nodeOrder * 100);
+
+    testRepository.put(new TestKey(idPrefix), new TestValue("0"));
+    testRepository.put(new TestKey(idPrefix + 1), new TestValue("1"));
 
     cluster.execute(() -> log.info("TEST Cluster run"));
-    cluster.executeBean(RunnableBean.class);
+    int result = cluster.runBean(RunnableBean.class, "<Test Argument>").iterator().next();
+
+    log.info("TEST Cluster run result: {}", result);
   }
 }

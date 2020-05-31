@@ -22,9 +22,14 @@ public interface Cluster {
   <R, T extends ClusterJob<R>> Collection<R> runBean(Class<T> bean);
   <R, T extends ClusterJob<R>> Collection<R> runBean(ClusterGroup clusterGroup, Class<T> bean);
 
+  <A, R, T extends ClusterArgJob<A, R>> Collection<R> runBean(Class<T> bean, A arg);
+  <A, R, T extends ClusterArgJob<A, R>> Collection<R> runBean(ClusterGroup clusterGroup, Class<T> bean, A arg);
+
   boolean isActivated();
 
   void setOnClusterReadyListener(OnClusterReadyListener listener);
 
   void waitForReady() throws InterruptedException;
+
+  long getNodeOrder();
 }

@@ -1,10 +1,6 @@
 package com.technologicgroup.boost.common;
 
-import com.technologicgroup.boost.core.Cluster;
-import com.technologicgroup.boost.core.ClusterCall;
-import com.technologicgroup.boost.core.ClusterGroup;
-import com.technologicgroup.boost.core.ClusterJob;
-import com.technologicgroup.boost.core.OnClusterReadyListener;
+import com.technologicgroup.boost.core.*;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ignite.Ignite;
@@ -91,6 +87,16 @@ class IgniteCluster implements Cluster {
   }
 
   @Override
+  public <A, R, T extends ClusterArgJob<A, R>> Collection<R> runBean(Class<T> bean, A arg) {
+    return ignite.compute().broadcast(new ClusterJobBeanArgProvider<>(bean, arg));
+  }
+
+  @Override
+  public <A, R, T extends ClusterArgJob<A, R>> Collection<R> runBean(ClusterGroup clusterGroup, Class<T> bean, A arg) {
+    return ignite.compute(mapClusterGroup(clusterGroup)).broadcast(new ClusterJobBeanArgProvider<>(bean, arg));
+  }
+
+  @Override
   public boolean isActivated() {
     return activated;
   }
@@ -107,6 +113,11 @@ class IgniteCluster implements Cluster {
   @Override
   public void waitForReady() throws InterruptedException {
     readyLatch.await();
+  }
+
+  @Override
+  public long getNodeOrder() {
+    return ignite.cluster().localNode().order();
   }
 
   @SuppressWarnings("BusyWait")

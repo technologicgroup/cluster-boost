@@ -1,5 +1,6 @@
 package com.technologicgroup.cluster.testapp;
 
+import com.technologicgroup.boost.core.ClusterArgJob;
 import com.technologicgroup.cluster.testapp.domain.TestRepository;
 import com.technologicgroup.boost.core.Cluster;
 import lombok.AllArgsConstructor;
@@ -9,18 +10,19 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class RunnableBean implements Runnable {
+public class RunnableBean implements ClusterArgJob<String, Integer> {
 
   private final TestRepository testRepository;
   private final Cluster cluster;
 
   @Override
-  public void run() {
-    log.info("TEST run bean");
+  public Integer run(String arg) {
+    log.info("TEST run bean with argument {}", arg);
 
     int size = testRepository.getAllLocal().size();
     log.info("Runnable executed, items found on node: {}", size);
 
     cluster.execute(() -> log.info("You can call cluster from the bean as well"));
+    return size;
   }
 }
