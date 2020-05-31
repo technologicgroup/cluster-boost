@@ -6,6 +6,7 @@ import com.technologicgroup.boost.core.ClusterGroup;
 import com.technologicgroup.boost.core.ClusterJob;
 import com.technologicgroup.boost.core.OnClusterReadyListener;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ignite.Ignite;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +18,14 @@ import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 class IgniteCluster implements Cluster {
   private final Ignite ignite;
+  private final String[] hosts;
+
+  private volatile boolean activated;
 
   CountDownLatch readyLatch = new CountDownLatch(1);
   OnClusterReadyListener listener;
@@ -86,7 +91,7 @@ class IgniteCluster implements Cluster {
 
   @Override
   public boolean isActivated() {
-    return ignite.cluster().active() && Activator.isReady();
+    return activated;
   }
 
   @Override
@@ -98,15 +103,63 @@ class IgniteCluster implements Cluster {
     }
   }
 
+  @Override
+  public void waitForReady() throws InterruptedException {
+    readyLatch.await();
+  }
+
+  @SuppressWarnings("BusyWait")
+  void startActivation() {
+    if (isFirstNode()) {
+      while (!checkActivationForAllNodes()) {
+        try {
+          Thread.sleep(100);
+        } catch (InterruptedException e) {
+          throw new RuntimeException(e);
+        } catch (Throwable th) {
+          log.error("Cluster activation error: {}", th.getMessage(), th);
+          throw th;
+        }
+      }
+      run(this::setIsReady);
+    }
+  }
+
+  private boolean isFirstNode() {
+    return ignite.cluster().localNode().order() == 1;
+  }
+
+  private boolean checkActivationForAllNodes() {
+    if (!activated) {
+      Collection<Boolean> activations = run(() -> {
+        boolean isActivated = isLocalNodeActivated();
+        log.info("Cluster host {} activation {}", ignite.cluster().node().hostNames(), isActivated);
+        return isActivated;
+      });
+
+      if (activations.size() < hosts.length) {
+        log.debug("Waiting for all hosts: {} of {} is up", activations.size(), hosts.length);
+        return false;
+      }
+      activated = activations.stream().allMatch(Boolean::booleanValue);
+    }
+    return activated;
+  }
+
   synchronized void setIsReady() {
     readyLatch.countDown();
     Optional.ofNullable(listener).ifPresent(OnClusterReadyListener::onClusterReady);
     listener = null;
   }
 
-  @Override
-  public void waitForReady() throws InterruptedException {
-    readyLatch.await();
+  synchronized boolean isLocalNodeActivated() {
+    if (ignite == null) {
+      return false;
+    }
+    if (ignite.cluster() == null) {
+      return false;
+    }
+    return ignite.cluster().active() && Activator.isReady();
   }
 
 }
