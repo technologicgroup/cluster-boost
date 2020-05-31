@@ -1,14 +1,13 @@
 package com.technologicgroup.boost.common;
 
-import com.technologicgroup.boost.core.ClusterArgJob;
-import com.technologicgroup.boost.core.ClusterJob;
+import com.technologicgroup.boost.core.ClusterTask;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ignite.lang.IgniteCallable;
 
 @Slf4j
 @AllArgsConstructor
-class ClusterJobBeanArgProvider<A, R, T extends ClusterArgJob<A, R>> implements IgniteCallable<R> {
+class ClusterTaskBeanProvider<A, R, T extends ClusterTask<A, R>> implements IgniteCallable<R> {
     private final Class<T> beanClass;
     private final A arg;
 

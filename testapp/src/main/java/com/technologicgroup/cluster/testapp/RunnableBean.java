@@ -1,6 +1,6 @@
 package com.technologicgroup.cluster.testapp;
 
-import com.technologicgroup.boost.core.ClusterArgJob;
+import com.technologicgroup.boost.core.ClusterTask;
 import com.technologicgroup.cluster.testapp.domain.TestRepository;
 import com.technologicgroup.boost.core.Cluster;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class RunnableBean implements ClusterArgJob<String, Integer> {
+public class RunnableBean implements ClusterTask<String, Integer> {
 
   private final TestRepository testRepository;
   private final Cluster cluster;

@@ -37,22 +37,22 @@ class IgniteCluster implements Cluster {
   }
 
   @Override
-  public void execute(ClusterGroup clusterGroup, ClusterCall job) {
+  public void execute(ClusterGroup clusterGroup, Runnable job) {
     ignite.compute(mapClusterGroup(clusterGroup)).broadcast(job::run);
   }
 
   @Override
-  public void execute(ClusterCall job) {
+  public void execute(Runnable job) {
     ignite.compute().broadcast(job::run);
   }
 
   @Override
-  public synchronized void executeAsync(ClusterGroup clusterGroup, ClusterCall job) {
+  public synchronized void executeAsync(ClusterGroup clusterGroup, Runnable job) {
     ignite.compute(mapClusterGroup(clusterGroup)).broadcastAsync(job::run);
   }
 
   @Override
-  public synchronized void executeAsync(ClusterCall job) {
+  public synchronized void executeAsync(Runnable job) {
     ignite.compute().broadcastAsync(job::run);
   }
 
@@ -87,13 +87,13 @@ class IgniteCluster implements Cluster {
   }
 
   @Override
-  public <A, R, T extends ClusterArgJob<A, R>> Collection<R> runBean(Class<T> bean, A arg) {
-    return ignite.compute().broadcast(new ClusterJobBeanArgProvider<>(bean, arg));
+  public <A, R, T extends ClusterTask<A, R>> Collection<R> runBean(Class<T> bean, A arg) {
+    return ignite.compute().broadcast(new ClusterTaskBeanProvider<>(bean, arg));
   }
 
   @Override
-  public <A, R, T extends ClusterArgJob<A, R>> Collection<R> runBean(ClusterGroup clusterGroup, Class<T> bean, A arg) {
-    return ignite.compute(mapClusterGroup(clusterGroup)).broadcast(new ClusterJobBeanArgProvider<>(bean, arg));
+  public <A, R, T extends ClusterTask<A, R>> Collection<R> runBean(ClusterGroup clusterGroup, Class<T> bean, A arg) {
+    return ignite.compute(mapClusterGroup(clusterGroup)).broadcast(new ClusterTaskBeanProvider<>(bean, arg));
   }
 
   @Override

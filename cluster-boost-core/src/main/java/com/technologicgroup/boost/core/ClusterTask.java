@@ -1,5 +1,5 @@
 package com.technologicgroup.boost.core;
 
-public interface ClusterArgJob<A, R> {
+public interface ClusterTask<A, R> {
     R run(A arg);
 }
