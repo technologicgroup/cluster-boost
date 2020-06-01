@@ -4,3 +4,4 @@ cluster-boost-core-ignite/target
 cluster-boost-core/target
 testapp/target
 ignite
+cluster-boost-ignite/target
