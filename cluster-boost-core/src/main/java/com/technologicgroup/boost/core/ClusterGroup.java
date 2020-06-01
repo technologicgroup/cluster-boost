@@ -1,13 +1,13 @@
 package com.technologicgroup.boost.core;
 
-import java.util.List;
+import java.util.Set;
 
 import lombok.Value;
 
 /**
- * ClusterGroup represents a cluster group as a list of node identifiers
+ * ClusterGroup represents a cluster group as a set of node identifiers
  */
 @Value
 public class ClusterGroup {
-  List<String> nodes;
+  Set<String> nodes;
 }

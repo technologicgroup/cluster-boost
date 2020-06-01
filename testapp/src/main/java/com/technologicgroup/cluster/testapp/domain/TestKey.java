@@ -6,5 +6,5 @@ import lombok.Value;
 
 @Value
 public class TestKey implements Serializable {
-  private int id;
+  int id;
 }

@@ -31,25 +31,29 @@ public abstract class CommonRepository<K, V> implements ClusterRepository<K, V> 
   }
 
   @Override
-  public ClusterGroup getClusterGroup(ClusterRepository<K, V> repository) {
-    CommonRepository<K, V> commonRepository = (CommonRepository<K, V>)repository;
-
+  public ClusterGroup getClusterGroup() {
     org.apache.ignite.cluster.ClusterGroup
-        clusterGroup = ignite.cluster().forCacheNodes(commonRepository.cache().getName());
+        clusterGroup = ignite.cluster().forCacheNodes(cache().getName());
 
-    List<String> idList = clusterGroup.nodes()
+    Set<String> ids = clusterGroup.nodes()
             .stream()
             .map(ClusterNode::id)
             .map(UUID::toString)
-            .collect(Collectors.toList());
+            .collect(Collectors.toSet());
 
-    return new ClusterGroup(idList);
+    return new ClusterGroup(ids);
   }
 
   @Override
-  public ClusterGroup getClusterGroup(ClusterRepository<K, V> repository, K key) {
+  public ClusterGroup getClusterGroup(Set<K> keys) {
     Affinity<K> affinity = ignite.affinity(cache().getName());
-    return new ClusterGroup(Collections.singletonList(affinity.mapKeyToNode(key).id().toString()));
+
+    Set<String> ids = keys.stream().map(affinity::mapKeyToNode)
+            .map(ClusterNode::id)
+            .map(UUID::toString)
+            .collect(Collectors.toSet());
+
+    return new ClusterGroup(ids);
   }
 
   @Override
