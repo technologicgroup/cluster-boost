@@ -7,11 +7,11 @@
     <groupId>com.technologicgroup.cluster</groupId>
     <artifactId>cluster-boost</artifactId>
     <packaging>pom</packaging>
-    <version>${core.version}</version>
+    <version>0.1</version>
 
     <modules>
         <module>cluster-boost-core</module>
-        <module>cluster-boost-core-ignite</module>
+        <module>cluster-boost-ignite</module>
         <module>testapp</module>
     </modules>
 
