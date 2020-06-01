@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-class Activator {
+class ContextHolder {
 
   @Getter
   static IgniteCluster cluster;
@@ -15,10 +15,10 @@ class Activator {
 
   private static final Object locker = new Object();
 
-  public Activator(IgniteCluster cluster, ApplicationContext context) {
+  public ContextHolder(IgniteCluster cluster, ApplicationContext context) {
     synchronized (locker) {
-      Activator.cluster = cluster;
-      Activator.context = context;
+      ContextHolder.cluster = cluster;
+      ContextHolder.context = context;
     }
   }
 

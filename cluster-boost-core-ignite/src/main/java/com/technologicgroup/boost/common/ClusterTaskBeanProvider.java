@@ -12,7 +12,7 @@ class ClusterTaskBeanProvider<A, R, T extends ClusterTask<A, R>> implements Igni
   private final A arg;
 
   private T getBean() {
-        return Activator.getContext().getBean(beanClass);
+        return ContextHolder.getContext().getBean(beanClass);
     }
 
   @Override

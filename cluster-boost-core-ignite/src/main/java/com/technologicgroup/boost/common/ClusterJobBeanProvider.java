@@ -12,7 +12,7 @@ class ClusterJobBeanProvider<R, T extends ClusterJob<R>> implements IgniteCallab
   private final Class<T> beanClass;
 
   private T getBean() {
-    return Activator.getContext().getBean(beanClass);
+    return ContextHolder.getContext().getBean(beanClass);
   }
 
   @Override

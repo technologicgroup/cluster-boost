@@ -5,12 +5,12 @@
     <parent>
         <artifactId>cluster-boost</artifactId>
         <groupId>com.technologicgroup.cluster</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cluster-boost-common</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>cluster-boost-ignite</artifactId>
+    <version>${core.version}</version>
 
     <repositories>
         <repository>
@@ -23,7 +23,7 @@
         <dependency>
             <groupId>com.technologicgroup.cluster</groupId>
             <artifactId>cluster-boost-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${core.version}</version>
         </dependency>
 
         <dependency>

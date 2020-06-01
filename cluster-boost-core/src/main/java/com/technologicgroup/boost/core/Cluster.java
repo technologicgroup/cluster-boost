@@ -4,10 +4,30 @@ import java.util.Collection;
 
 public interface Cluster {
 
+  /**
+   * Execute runnable on cluster group nodes
+   * @param clusterGroup represents set of nodes
+   * @param job is a runnable object
+   */
   void execute(ClusterGroup clusterGroup, Runnable job);
+
+  /**
+   * Execute runnable on every cluster node
+   * @param job is a runnable object
+   */
   void execute(Runnable job);
 
+  /**
+   * Asynchronously execute runnable on cluster group nodes
+   * @param clusterGroup represents set of nodes
+   * @param job is a runnable object
+   */
   void executeAsync(ClusterGroup clusterGroup, Runnable job);
+
+  /**
+   * Asynchronously execute runnable on every cluster node
+   * @param job is a runnable object
+   */
   void executeAsync(Runnable job);
 
   <T extends Runnable> void executeBeanAsync(Class<T> bean);

@@ -20,7 +20,7 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-@ComponentScan(basePackageClasses = { Activator.class, ClusterProperties.class })
+@ComponentScan(basePackageClasses = { ContextHolder.class, ClusterProperties.class })
 public class RepositoryConfig {
 
   private final ClusterProperties clusterProperties;

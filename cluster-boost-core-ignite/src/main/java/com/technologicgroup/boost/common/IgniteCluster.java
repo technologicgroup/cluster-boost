@@ -184,7 +184,7 @@ class IgniteCluster implements Cluster {
     if (ignite.cluster() == null) {
       return false;
     }
-    return ignite.cluster().active() && Activator.isReady();
+    return ignite.cluster().active() && ContextHolder.isReady();
   }
 
 }

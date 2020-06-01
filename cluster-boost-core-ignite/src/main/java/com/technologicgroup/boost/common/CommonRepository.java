@@ -77,7 +77,7 @@ public abstract class CommonRepository<K, V> implements ClusterRepository<K, V> 
   @Override
   public Map<K, V> getAllLocal() {
     Map<K, V> result = new HashMap<>();
-    
+
     for (Cache.Entry<K, V> entry : getAllLocalIterable()) {
       result.put(entry.getKey(), entry.getValue());
     }
