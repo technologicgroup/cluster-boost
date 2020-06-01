@@ -1,24 +1,26 @@
 package com.technologicgroup.cluster.testapp;
 
 import com.technologicgroup.boost.core.Cluster;
-import com.technologicgroup.boost.core.OnClusterReadyListener;
+import com.technologicgroup.boost.common.ClusterReadyEvent;
 import com.technologicgroup.cluster.testapp.domain.TestKey;
 import com.technologicgroup.cluster.testapp.domain.TestRepository;
 import com.technologicgroup.cluster.testapp.domain.TestValue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ClusterReadyListener implements OnClusterReadyListener {
+public class ClusterReadyConsumer implements ApplicationListener<ClusterReadyEvent> {
   private final Cluster cluster;
   private final TestRepository testRepository;
 
   @Override
-  public void onClusterReady() {
-    log.info("Cluster is ready");
+  public void onApplicationEvent(@NotNull ClusterReadyEvent event) {
+    log.info("Cluster is ready: {}", event);
 
     long nodeOrder = cluster.getNodeOrder();
     int idPrefix = (int) (nodeOrder * 100);

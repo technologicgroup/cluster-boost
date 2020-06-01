@@ -4,11 +4,12 @@ import com.technologicgroup.boost.core.*;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ignite.Ignite;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
@@ -21,13 +22,13 @@ class IgniteCluster implements Cluster {
   private final Ignite ignite;
   private final String[] hosts;
   private final int startupTimeout;
+  private final ApplicationEventPublisher publisher;
 
   private volatile boolean activated;
 
   private static final int DEFAULT_SLEEP_INTERVAL = 100;
 
   CountDownLatch readyLatch = new CountDownLatch(1);
-  OnClusterReadyListener listener;
 
   @Override
   public <R> Collection<R> run(ClusterGroup clusterGroup, ClusterJob<R> job) {
@@ -105,15 +106,6 @@ class IgniteCluster implements Cluster {
   }
 
   @Override
-  public synchronized void setOnClusterReadyListener(OnClusterReadyListener listener) {
-    this.listener = listener;
-    if (isActivated()) {
-      Optional.ofNullable(listener).ifPresent(OnClusterReadyListener::onClusterReady);
-      this.listener = null;
-    }
-  }
-
-  @Override
   public void waitForReady() throws InterruptedException {
     readyLatch.await();
   }
@@ -157,7 +149,7 @@ class IgniteCluster implements Cluster {
     if (!activated) {
       Collection<Boolean> activations = run(() -> {
         boolean isActivated = isLocalNodeActivated();
-        log.info("Cluster host {} activation {}", ignite.cluster().node().hostNames(), isActivated);
+        log.info("Cluster node {} activation {}", ignite.cluster().node().hostNames(), isActivated);
         return isActivated;
       });
 
@@ -173,8 +165,7 @@ class IgniteCluster implements Cluster {
   synchronized void setIsReady() {
     activated = true;
     readyLatch.countDown();
-    Optional.ofNullable(listener).ifPresent(OnClusterReadyListener::onClusterReady);
-    listener = null;
+    CompletableFuture.runAsync(() -> publisher.publishEvent(new ClusterReadyEvent(this)));
   }
 
   synchronized boolean isLocalNodeActivated() {

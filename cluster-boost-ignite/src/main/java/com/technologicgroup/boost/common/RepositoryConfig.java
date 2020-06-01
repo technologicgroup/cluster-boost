@@ -10,6 +10,7 @@ import org.apache.ignite.configuration.CacheConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
 import org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -43,7 +44,7 @@ public class RepositoryConfig {
   }
 
   @Bean
-  public Cluster igniteCluster(Ignite ignite, CommonRepository<?, ?>[] repositories) {
+  public Cluster igniteCluster(Ignite ignite, CommonRepository<?, ?>[] repositories, ApplicationEventPublisher publisher) {
     for (CommonRepository<?, ?> repository : repositories) {
       CacheConfiguration<?, ?> configuration = repository.getConfiguration();
       ignite.getOrCreateCache(configuration);
@@ -51,7 +52,8 @@ public class RepositoryConfig {
 
     IgniteCluster igniteCluster = new IgniteCluster(ignite,
             clusterProperties.getHosts(),
-            clusterProperties.getStartupTimeout());
+            clusterProperties.getStartupTimeout(),
+            publisher);
 
     CompletableFuture.runAsync(igniteCluster::activate);
 
