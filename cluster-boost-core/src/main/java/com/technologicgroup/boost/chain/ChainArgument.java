@@ -5,7 +5,7 @@ import lombok.Value;
 import java.util.List;
 
 @Value
-public class ChainArgument<A> {
+class ChainArgument<A> {
   A arg;
   List<ChainStep<?, ?>> items;
 }
