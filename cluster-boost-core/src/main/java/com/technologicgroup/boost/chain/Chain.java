@@ -15,8 +15,9 @@ public class Chain {
 
   private final Cluster cluster;
   private ClusterGroup clusterGroup;
-  List<ChainStep<?, ?>> steps = new ArrayList<>();
   private Object arg;
+
+  List<ChainStep<?, ?>> steps = new ArrayList<>();
 
   public static Chain of(Cluster cluster) {
     return new Chain(cluster);
