@@ -1,11 +1,11 @@
-package com.technologicgroup.boost.common;
+package com.technologicgroup.boost.chain;
 
 import lombok.Value;
 
 import java.util.List;
 
 @Value
-class ChainArgument<A> {
+public class ChainArgument<A> {
   A arg;
   List<ChainStep<?, ?>> items;
 }

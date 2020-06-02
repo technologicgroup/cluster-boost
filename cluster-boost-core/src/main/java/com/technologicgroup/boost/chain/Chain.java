@@ -1,4 +1,4 @@
-package com.technologicgroup.boost.common;
+package com.technologicgroup.boost.chain;
 
 import com.technologicgroup.boost.core.Cluster;
 import com.technologicgroup.boost.core.ClusterGroup;

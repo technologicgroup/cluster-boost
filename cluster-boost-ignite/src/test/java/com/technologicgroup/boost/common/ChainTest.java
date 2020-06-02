@@ -1,6 +1,7 @@
 package com.technologicgroup.boost.common;
 
 import com.technologicgroup.boost.core.ClusterTask;
+import com.technologicgroup.boost.chain.Chain;
 
 public class ChainTest {
 

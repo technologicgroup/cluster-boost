@@ -2,6 +2,7 @@ package com.technologicgroup.cluster.testapp;
 
 import com.technologicgroup.boost.core.Cluster;
 import com.technologicgroup.boost.common.ClusterReadyEvent;
+import com.technologicgroup.boost.chain.Chain;
 import com.technologicgroup.cluster.testapp.domain.TestKey;
 import com.technologicgroup.cluster.testapp.domain.TestRepository;
 import com.technologicgroup.cluster.testapp.domain.TestValue;
@@ -30,7 +31,13 @@ public class ClusterReadyConsumer implements ApplicationListener<ClusterReadyEve
 
     cluster.execute(() -> log.info("TEST Cluster run"));
     int result = cluster.runBean(RunnableBean.class, "<Test Argument>").iterator().next();
-
     log.info("TEST Cluster run result: {}", result);
+
+    boolean boolResult = Chain.of(cluster)
+            .start(RunnableBean.class, "Chain argument")
+            .map(ChainBean.class)
+            .run().iterator().next();
+
+    log.info("TEST Cluster chain run result: {}", boolResult);
   }
 }
