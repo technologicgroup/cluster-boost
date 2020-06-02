@@ -29,7 +29,7 @@ public class Chain {
 
   public <A, R, T extends ClusterTask<A, R>> ChainStep<A, R> start(Class<T> bean, A arg) {
     this.arg = arg;
-    ChainStep<A, R> step = new ChainStep<>(bean, arg, this);
+    ChainStep<A, R> step = new ChainStep<>(bean, this);
     steps.add(step);
     return step;
   }

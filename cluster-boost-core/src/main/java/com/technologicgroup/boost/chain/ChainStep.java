@@ -13,8 +13,6 @@ public class ChainStep<A, R> {
   @Getter(value = AccessLevel.PACKAGE)
   private final Class<? extends ClusterTask<A, R>> bean;
 
-  @Getter(value = AccessLevel.PACKAGE)
-  private final A arg;
   private final Chain chain;
 
   public Collection<R> run() {
@@ -22,7 +20,7 @@ public class ChainStep<A, R> {
   }
 
   public <Res, T extends ClusterTask<R, Res>> ChainStep<R, Res> map(Class<T> bean) {
-    ChainStep<R, Res> step = new ChainStep<>(bean, null, chain);
+    ChainStep<R, Res> step = new ChainStep<>(bean, chain);
     chain.steps.add(step);
     return step;
   }
