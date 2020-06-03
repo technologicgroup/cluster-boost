@@ -115,6 +115,12 @@ class IgniteCluster implements Cluster {
     return ignite.cluster().localNode().order();
   }
 
+  @Override
+  public boolean isFirstNode() {
+    return ignite.cluster().localNode().order() == 1;
+  }
+
+
   @SuppressWarnings("BusyWait")
   void activate() {
     if (isFirstNode()) {
@@ -139,10 +145,6 @@ class IgniteCluster implements Cluster {
             .collect(Collectors.toList());
 
     return ignite.cluster().forNodeIds(collection);
-  }
-
-  private boolean isFirstNode() {
-    return ignite.cluster().localNode().order() == 1;
   }
 
   private boolean checkActivationForAllNodes() {

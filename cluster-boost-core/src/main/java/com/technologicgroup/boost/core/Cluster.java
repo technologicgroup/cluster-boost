@@ -2,6 +2,9 @@ package com.technologicgroup.boost.core;
 
 import java.util.Collection;
 
+/**
+ * Provides cluster operations
+ */
 public interface Cluster {
 
   /**
@@ -111,7 +114,7 @@ public interface Cluster {
 
   /**
    * Determine if the whole cluster with all listed hosts was activated successfully
-   * @return true if cluster was activated and false otherwise
+   * @return #true if cluster was activated and #false otherwise
    */
   boolean isActivated();
 
@@ -126,4 +129,10 @@ public interface Cluster {
    * @return the order
    */
   long getNodeOrder();
+
+  /**
+   * Indicates if a current local node is the first cluster node
+   * @return #true if a current node is the first and #false otherwise
+   */
+  boolean isFirstNode();
 }

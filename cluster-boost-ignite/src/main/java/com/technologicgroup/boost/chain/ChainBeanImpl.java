@@ -19,12 +19,14 @@ class ChainBeanImpl<A, R> implements ChainBean<A, R> {
     Object result = chainArgument.getArg();
 
     for (ChainStep<?, ?> chainItem : chainArgument.getItems()) {
-      ClusterTask clusterTask = context.getBean(chainItem.getBean());
+      if (chainItem.getBean() != null) {
+        ClusterTask clusterTask = context.getBean(chainItem.getBean());
 
-      if (clusterTask == null) {
-        throw new RuntimeException("Cannot find bean class: " + chainItem.getBean());
+        if (clusterTask == null) {
+          throw new RuntimeException("Cannot find bean class: " + chainItem.getBean());
+        }
+        result = clusterTask.run(result);
       }
-      result = clusterTask.run(result);
     }
     return (R)result;
   }

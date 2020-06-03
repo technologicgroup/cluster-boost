@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class Chain {
 
   private final Cluster cluster;
   private ClusterGroup clusterGroup;
-  private Object arg;
+  Object arg;
 
   List<ChainStep<?, ?>> steps = new ArrayList<>();
 
@@ -28,7 +28,14 @@ public class Chain {
     return this;
   }
 
-  public <A, R, T extends ClusterTask<A, R>> ChainStep<A, R> start(Class<T> bean, A arg) {
+  public <A, R, T extends ClusterTask<A, R>> ChainStep<A, R> map(Class<T> bean) {
+    this.arg = null;
+    ChainStep<A, R> step = new ChainStep<>(bean, this);
+    steps.add(step);
+    return step;
+  }
+
+  public <A, R, T extends ClusterTask<A, R>> ChainStep<A, R> map(Class<T> bean, A arg) {
     this.arg = arg;
     ChainStep<A, R> step = new ChainStep<>(bean, this);
     steps.add(step);
