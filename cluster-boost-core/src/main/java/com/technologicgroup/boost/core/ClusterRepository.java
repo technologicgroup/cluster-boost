@@ -5,6 +5,7 @@ import java.util.Set;
 
 /**
  * Data access (Repository) interface to cluster data stored as key/value pairs
+ * All get data operations are local
  * @param <K> key class
  * @param <V> value class
  */
@@ -37,7 +38,7 @@ public interface ClusterRepository<K, V> {
   Map<K, V> getLocal(Set<K> keys);
 
   /**
-   * Gets all repository data from local npde
+   * Gets all repository data from local node
    * @return a map of key/value pairs
    */
   Map<K, V> getAllLocal();

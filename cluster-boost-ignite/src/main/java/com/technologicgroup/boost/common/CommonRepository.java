@@ -124,7 +124,7 @@ public abstract class CommonRepository<K, V> implements ClusterRepository<K, V> 
     return (Class<V>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
   }
 
-  private IgniteCache<K, V> cache() {
+  IgniteCache<K, V> cache() {
     return ignite.cache(getConfiguration().getName());
   }
 

@@ -6,6 +6,7 @@ import com.technologicgroup.boost.chain.Chain;
 import com.technologicgroup.cluster.testapp.domain.TestKey;
 import com.technologicgroup.cluster.testapp.domain.TestRepository;
 import com.technologicgroup.cluster.testapp.domain.TestValue;
+import com.technologicgroup.cluster.testapp.service.TestDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class ClusterReadyConsumer implements ApplicationListener<ClusterReadyEvent> {
   private final Cluster cluster;
   private final TestRepository testRepository;
+  private final TestDataService testDataService;
 
   @Override
   public void onApplicationEvent(@NotNull ClusterReadyEvent event) {
