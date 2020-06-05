@@ -3,6 +3,7 @@
 cluster-boost-core-ignite/target
 cluster-boost-core/target
 cluster-boost-ignite/target
+cluster-boost-ignite-audit/target
 testapp/target
 ignite
 
