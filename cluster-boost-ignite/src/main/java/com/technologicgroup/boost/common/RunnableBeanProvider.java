@@ -17,9 +17,9 @@ class RunnableBeanProvider<T extends Runnable> implements IgniteRunnable {
     public void run() {
         try {
             getBean().run();
-        } catch (Throwable th) {
-            log.error(th.getMessage(), th);
-            throw th;
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw e;
         }
     }
 }

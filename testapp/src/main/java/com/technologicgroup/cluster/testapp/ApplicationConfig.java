@@ -1,6 +1,6 @@
 package com.technologicgroup.cluster.testapp;
 
-import com.technologicgroup.boost.common.RepositoryConfig;
+import com.technologicgroup.boost.common.ClusterConfig;
 import org.apache.ignite.configuration.IgniteConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Configuration
-@ComponentScan(basePackageClasses = { RepositoryConfig.class })
+@ComponentScan(basePackageClasses = { ClusterConfig.class })
 public class ApplicationConfig {
 
   @Bean

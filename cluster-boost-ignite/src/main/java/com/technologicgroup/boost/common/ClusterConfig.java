@@ -23,7 +23,7 @@ import java.util.concurrent.CompletableFuture;
 @Configuration
 @RequiredArgsConstructor
 @ComponentScan(basePackageClasses = { ContextHolder.class, ClusterProperties.class, ChainConfig.class })
-public class RepositoryConfig {
+public class ClusterConfig {
 
   private final ClusterProperties clusterProperties;
 

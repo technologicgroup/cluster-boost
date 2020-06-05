@@ -8,7 +8,6 @@ import org.apache.ignite.lang.IgniteCallable;
 @Slf4j
 @RequiredArgsConstructor
 class ClusterJobBeanProvider<R, T extends ClusterJob<R>> implements IgniteCallable<R> {
-
   private final Class<T> beanClass;
 
   private T getBean() {
@@ -19,9 +18,9 @@ class ClusterJobBeanProvider<R, T extends ClusterJob<R>> implements IgniteCallab
   public R call() {
     try {
       return getBean().run();
-    } catch (Throwable th) {
-      log.error(th.getMessage(), th);
-      throw th;
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      throw e;
     }
   }
 }
