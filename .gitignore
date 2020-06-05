@@ -2,6 +2,7 @@
 .idea
 cluster-boost-core-ignite/target
 cluster-boost-core/target
+cluster-boost-ignite/target
 testapp/target
 ignite
-cluster-boost-ignite/target
+

@@ -12,15 +12,25 @@
     <modules>
         <module>cluster-boost-core</module>
         <module>cluster-boost-ignite</module>
+        <module>cluster-boost-ignite-audit</module>
         <module>testapp</module>
     </modules>
 
     <properties>
         <java.version>1.8</java.version>
+        <target.version>1.8</target.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <core.version>0.1</core.version>
+        <ignite.version>8.7.10</ignite.version>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>GridGain External Repository</id>
+            <url>http://www.gridgainsystems.com/nexus/content/repositories/external</url>
+        </repository>
+    </repositories>
 
     <dependencies>
 
