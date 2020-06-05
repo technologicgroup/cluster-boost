@@ -1,5 +1,6 @@
 package com.technologicgroup.boost.common;
 
+import com.technologicgroup.boost.common.providers.BeanProviderFactory;
 import com.technologicgroup.boost.core.*;
 
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ class IgniteCluster implements Cluster {
   private final Ignite ignite;
   private final String[] hosts;
   private final int startupTimeout;
+  private final BeanProviderFactory beanProviderFactory;
   private final ApplicationEventPublisher publisher;
 
   private volatile boolean activated;
@@ -62,42 +64,42 @@ class IgniteCluster implements Cluster {
 
   @Override
   public <T extends Runnable> void executeBeanAsync(ClusterGroup clusterGroup, Class<T> bean) {
-    ignite.compute(mapClusterGroup(clusterGroup)).broadcastAsync(new RunnableBeanProvider<>(bean));
+    ignite.compute(mapClusterGroup(clusterGroup)).broadcastAsync(beanProviderFactory.getRunnable(bean));
   }
 
   @Override
   public <T extends Runnable> void executeBeanAsync(Class<T> bean) {
-    ignite.compute().broadcastAsync(new RunnableBeanProvider<>(bean));
+    ignite.compute().broadcastAsync(beanProviderFactory.getRunnable(bean));
   }
 
   @Override
   public <T extends Runnable> void executeBean(ClusterGroup clusterGroup, Class<T> bean) {
-    ignite.compute(mapClusterGroup(clusterGroup)).broadcast(new RunnableBeanProvider<>(bean));
+    ignite.compute(mapClusterGroup(clusterGroup)).broadcast(beanProviderFactory.getRunnable(bean));
   }
 
   @Override
   public <T extends Runnable> void executeBean(Class<T> bean) {
-    ignite.compute().broadcast(new RunnableBeanProvider<>(bean));
+    ignite.compute().broadcast(beanProviderFactory.getRunnable(bean));
   }
 
   @Override
   public <R, T extends ClusterJob<R>> Collection<R> runBean(ClusterGroup clusterGroup, Class<T> bean) {
-    return ignite.compute(mapClusterGroup(clusterGroup)).broadcast(new ClusterJobBeanProvider<>(bean));
+    return ignite.compute(mapClusterGroup(clusterGroup)).broadcast(beanProviderFactory.getJob(bean));
   }
 
   @Override
   public <R, T extends ClusterJob<R>> Collection<R> runBean(Class<T> bean) {
-    return ignite.compute().broadcast(new ClusterJobBeanProvider<>(bean));
+    return ignite.compute().broadcast(beanProviderFactory.getJob(bean));
   }
 
   @Override
   public <A, R, T extends ClusterTask<A, R>> Collection<R> runBean(Class<T> bean, A arg) {
-    return ignite.compute().broadcast(new ClusterTaskBeanProvider<>(bean, arg));
+    return ignite.compute().broadcast(beanProviderFactory.getTask(bean, arg));
   }
 
   @Override
   public <A, R, T extends ClusterTask<A, R>> Collection<R> runBean(ClusterGroup clusterGroup, Class<T> bean, A arg) {
-    return ignite.compute(mapClusterGroup(clusterGroup)).broadcast(new ClusterTaskBeanProvider<>(bean, arg));
+    return ignite.compute(mapClusterGroup(clusterGroup)).broadcast(beanProviderFactory.getTask(bean, arg));
   }
 
   @Override

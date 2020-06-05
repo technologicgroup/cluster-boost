@@ -1,6 +1,7 @@
 package com.technologicgroup.boost.common;
 
 import com.technologicgroup.boost.chain.ChainConfig;
+import com.technologicgroup.boost.common.providers.BeanProviderFactory;
 import com.technologicgroup.boost.core.Cluster;
 
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,10 @@ public class ClusterConfig {
   }
 
   @Bean
-  public Cluster igniteCluster(Ignite ignite, CommonRepository<?, ?>[] repositories, ApplicationEventPublisher publisher) {
+  public Cluster igniteCluster(Ignite ignite,
+                               CommonRepository<?, ?>[] repositories,
+                               BeanProviderFactory beanProviderFactory,
+                               ApplicationEventPublisher publisher) {
     for (CommonRepository<?, ?> repository : repositories) {
       CacheConfiguration<?, ?> configuration = repository.getConfiguration();
       ignite.getOrCreateCache(configuration);
@@ -54,6 +58,7 @@ public class ClusterConfig {
     IgniteCluster igniteCluster = new IgniteCluster(ignite,
             clusterProperties.getHosts(),
             clusterProperties.getStartupTimeout(),
+            beanProviderFactory,
             publisher);
 
     CompletableFuture.runAsync(igniteCluster::activate);

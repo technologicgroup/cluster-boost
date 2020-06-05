@@ -1,24 +1,23 @@
-package com.technologicgroup.boost.common;
+package com.technologicgroup.boost.common.providers;
 
-import com.technologicgroup.boost.core.ClusterTask;
+import com.technologicgroup.boost.common.ContextHolder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ignite.lang.IgniteCallable;
+import org.apache.ignite.lang.IgniteRunnable;
 
 @Slf4j
 @RequiredArgsConstructor
-class ClusterTaskBeanProvider<A, R, T extends ClusterTask<A, R>> implements IgniteCallable<R> {
+class BeanProviderRunnable<T extends Runnable> implements IgniteRunnable {
   private final Class<T> beanClass;
-  private final A arg;
 
   private T getBean() {
         return ContextHolder.getContext().getBean(beanClass);
     }
 
   @Override
-  public R call() {
+  public void run() {
     try {
-      return getBean().run(arg);
+      getBean().run();
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       throw e;

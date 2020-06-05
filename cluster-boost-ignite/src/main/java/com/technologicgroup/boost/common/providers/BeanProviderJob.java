@@ -1,5 +1,6 @@
-package com.technologicgroup.boost.common;
+package com.technologicgroup.boost.common.providers;
 
+import com.technologicgroup.boost.common.ContextHolder;
 import com.technologicgroup.boost.core.ClusterJob;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,7 +8,7 @@ import org.apache.ignite.lang.IgniteCallable;
 
 @Slf4j
 @RequiredArgsConstructor
-class ClusterJobBeanProvider<R, T extends ClusterJob<R>> implements IgniteCallable<R> {
+class BeanProviderJob<R, T extends ClusterJob<R>> implements IgniteCallable<R> {
   private final Class<T> beanClass;
 
   private T getBean() {
