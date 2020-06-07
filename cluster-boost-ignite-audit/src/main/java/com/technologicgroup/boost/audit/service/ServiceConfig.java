@@ -6,9 +6,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan(basePackageClasses = {
     AuditDataRepo.class,
-    AuditDataServiceImpl.class,
+    AuditDataAccessorImpl.class,
     AuditNodeItemRepo.class,
-    AuditNodeItemServiceImpl.class
+    AuditNodeItemAccessorImpl.class
 })
 public class ServiceConfig {
 

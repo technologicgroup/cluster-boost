@@ -9,7 +9,7 @@ import java.util.Set;
  * @param <K> key class
  * @param <V> value class
  */
-public interface ClusterDataService<K, V> {
+public interface ClusterDataAccessor<K, V> {
     /**
      * Gets a value associated with a key from the cluster VIA network
      * This operation can be local but in general it is slow network operation

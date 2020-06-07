@@ -1,7 +1,7 @@
 package com.technologicgroup.cluster.testapp;
 
-import com.technologicgroup.boost.audit.AuditDataService;
-import com.technologicgroup.boost.audit.AuditNodeItemService;
+import com.technologicgroup.boost.audit.AuditDataAccessor;
+import com.technologicgroup.boost.audit.AuditNodeItemAccessor;
 import com.technologicgroup.boost.core.Cluster;
 import com.technologicgroup.boost.common.ClusterReadyEvent;
 import com.technologicgroup.boost.chain.Chain;
@@ -22,8 +22,8 @@ import java.util.UUID;
 public class ClusterReadyConsumer implements ApplicationListener<ClusterReadyEvent> {
   private final Cluster cluster;
   private final TestRepository testRepository;
-  private final AuditDataService auditDataService;
-  private final AuditNodeItemService auditNodeItemService;
+  private final AuditDataAccessor auditDataService;
+  private final AuditNodeItemAccessor nodeItemAccessor;
 
   @Override
   public void onApplicationEvent(@NotNull ClusterReadyEvent event) {

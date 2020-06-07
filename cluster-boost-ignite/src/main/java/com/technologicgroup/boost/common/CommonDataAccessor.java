@@ -1,13 +1,13 @@
 package com.technologicgroup.boost.common;
 
-import com.technologicgroup.boost.core.ClusterDataService;
+import com.technologicgroup.boost.core.ClusterDataAccessor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
 import java.util.Set;
 
 @RequiredArgsConstructor
-public abstract class CommonDataService<K, V> implements ClusterDataService<K, V> {
+public abstract class CommonDataAccessor<K, V> implements ClusterDataAccessor<K, V> {
 
     private final CommonRepository<K, V> repository;
 

@@ -20,7 +20,7 @@ import java.util.UUID;
 class ChainBeanAuditImpl<A, R> implements ChainBean<A, R> {
 
   private final ApplicationContext context;
-  private final AuditNodeItemService auditNodeItemService;
+  private final AuditNodeItemAccessor nodeItemAccessor;
   private final Cluster cluster;
 
   @Override
@@ -52,7 +52,7 @@ class ChainBeanAuditImpl<A, R> implements ChainBean<A, R> {
             0,
             cluster.getLocalNode()
         );
-        auditNodeItemService.put(auditNodeItem.getId(), auditNodeItem);
+        nodeItemAccessor.put(auditNodeItem.getId(), auditNodeItem);
       }
     }
     return (R)result;

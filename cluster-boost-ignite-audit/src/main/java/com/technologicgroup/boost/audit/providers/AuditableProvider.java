@@ -1,9 +1,9 @@
 package com.technologicgroup.boost.audit.providers;
 
 import com.technologicgroup.boost.audit.AuditData;
-import com.technologicgroup.boost.audit.AuditDataService;
+import com.technologicgroup.boost.audit.AuditDataAccessor;
 import com.technologicgroup.boost.audit.AuditNodeItem;
-import com.technologicgroup.boost.audit.AuditNodeItemService;
+import com.technologicgroup.boost.audit.AuditNodeItemAccessor;
 import com.technologicgroup.boost.common.ContextHolder;
 import com.technologicgroup.boost.core.Cluster;
 import lombok.extern.slf4j.Slf4j;
@@ -15,11 +15,11 @@ import java.util.UUID;
 abstract class AuditableProvider<R, T> {
   protected String trackingId;
 
-  private AuditDataService getDataService() {
-    return ContextHolder.getContext().getBean(AuditDataService.class);
+  private AuditDataAccessor getDataService() {
+    return ContextHolder.getContext().getBean(AuditDataAccessor.class);
   }
-  protected AuditNodeItemService getItemService() {
-    return ContextHolder.getContext().getBean(AuditNodeItemService.class);
+  protected AuditNodeItemAccessor getItemService() {
+    return ContextHolder.getContext().getBean(AuditNodeItemAccessor.class);
   }
 
   protected T getBean(Class<T> beanClass) {
