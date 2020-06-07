@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>cluster-boost-ignite-audit</artifactId>
-    <version>0.1</version>
+    <version>${core.version}</version>
 
     <dependencies>
 

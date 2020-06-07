@@ -122,6 +122,11 @@ class IgniteCluster implements Cluster {
     return ignite.cluster().localNode().order() == 1;
   }
 
+  @Override
+  public String getLocalNode() {
+    return ignite.cluster().localNode().id().toString();
+  }
+
 
   @SuppressWarnings("BusyWait")
   void activate() {

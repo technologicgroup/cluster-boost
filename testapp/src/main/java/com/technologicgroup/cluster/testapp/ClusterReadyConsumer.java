@@ -1,17 +1,20 @@
 package com.technologicgroup.cluster.testapp;
 
+import com.technologicgroup.boost.audit.AuditDataService;
+import com.technologicgroup.boost.audit.AuditNodeItemService;
 import com.technologicgroup.boost.core.Cluster;
 import com.technologicgroup.boost.common.ClusterReadyEvent;
 import com.technologicgroup.boost.chain.Chain;
 import com.technologicgroup.cluster.testapp.domain.TestKey;
 import com.technologicgroup.cluster.testapp.domain.TestRepository;
 import com.technologicgroup.cluster.testapp.domain.TestValue;
-import com.technologicgroup.cluster.testapp.service.TestDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -19,7 +22,8 @@ import org.springframework.stereotype.Service;
 public class ClusterReadyConsumer implements ApplicationListener<ClusterReadyEvent> {
   private final Cluster cluster;
   private final TestRepository testRepository;
-  private final TestDataService testDataService;
+  private final AuditDataService auditDataService;
+  private final AuditNodeItemService auditNodeItemService;
 
   @Override
   public void onApplicationEvent(@NotNull ClusterReadyEvent event) {
@@ -36,12 +40,16 @@ public class ClusterReadyConsumer implements ApplicationListener<ClusterReadyEve
       int result = cluster.runBean(RunnableBean.class, "<Test Argument>").iterator().next();
       log.info("TEST Cluster run result: {}", result);
 
+      String trackingId = UUID.randomUUID().toString();
       boolean boolResult = Chain.of(cluster)
-              .map(RunnableBean.class, "Chain argument")
-              .map(ChainBean.class)
-              .run().iterator().next();
+          .track(trackingId)
+          .map(RunnableBean.class, "Chain argument")
+          .map(TaskBean.class)
+          .run().iterator().next();
 
       log.info("TEST Cluster chain run result: {}", boolResult);
+
+      log.info("Collected audit data: {}", auditDataService.networkGet(trackingId).toString());
     }
   }
 }

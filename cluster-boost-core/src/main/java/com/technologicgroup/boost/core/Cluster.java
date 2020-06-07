@@ -135,4 +135,6 @@ public interface Cluster {
    * @return #true if a current node is the first and #false otherwise
    */
   boolean isFirstNode();
+
+  String getLocalNode();
 }

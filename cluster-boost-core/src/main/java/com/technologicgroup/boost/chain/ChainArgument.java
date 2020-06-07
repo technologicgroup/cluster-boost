@@ -1,5 +1,6 @@
 package com.technologicgroup.boost.chain;
 
+import com.technologicgroup.boost.audit.Trackable;
 import lombok.Value;
 
 import java.util.List;
@@ -9,7 +10,8 @@ import java.util.List;
  * @param <A> is an argument class
  */
 @Value
-class ChainArgument<A> {
+class ChainArgument<A> implements Trackable {
   A arg;
   List<ChainStep<?, ?>> items;
+  String trackingId;
 }

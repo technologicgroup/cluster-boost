@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class ChainBean implements ClusterTask<Integer, Boolean> {
+public class TaskBean implements ClusterTask<Integer, Boolean> {
   @Override
   public Boolean run(Integer arg) {
     return arg > 0;

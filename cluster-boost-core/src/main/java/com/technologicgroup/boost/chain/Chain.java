@@ -22,6 +22,7 @@ public class Chain {
 
   private final Cluster cluster;
   private ClusterGroup clusterGroup;
+  private String trackingId;
   Object arg;
 
   List<ChainStep<?, ?>> steps = new ArrayList<>();
@@ -42,6 +43,11 @@ public class Chain {
    */
   public Chain on(ClusterGroup clusterGroup) {
     this.clusterGroup = clusterGroup;
+    return this;
+  }
+
+  public Chain track(String trackingId) {
+    this.trackingId = trackingId;
     return this;
   }
 
@@ -78,9 +84,9 @@ public class Chain {
 
   <R> Collection<R> run() {
     if (clusterGroup == null) {
-      return cluster.runBean(ChainBean.class, new ChainArgument(arg, steps));
+      return cluster.runBean(ChainBean.class, new ChainArgument(arg, steps, trackingId));
     } else {
-      return cluster.runBean(clusterGroup, ChainBean.class, new ChainArgument(arg, steps));
+      return cluster.runBean(clusterGroup, ChainBean.class, new ChainArgument(arg, steps, trackingId));
     }
   }
 
