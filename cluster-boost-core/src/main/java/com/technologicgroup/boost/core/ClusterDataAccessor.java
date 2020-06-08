@@ -2,6 +2,7 @@ package com.technologicgroup.boost.core;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * Data access (Repository) interface to cluster data stored as key/value pairs
@@ -40,4 +41,12 @@ public interface ClusterDataAccessor<K, V> {
      * @param map a key/value map
      */
     void putAll(Map<K, V> map);
+
+    /**
+     * Finds all key/value pairs that satisfies to the predicate
+     * Search performs to all nodes in the cluster
+     * @param predicate to satisfy
+     * @return a key/value map
+     */
+    Map<K, V> find(Predicate<V> predicate);
 }

@@ -13,5 +13,6 @@ public class AuditNodeItem {
   String message;
   String detailedMessage;
   int resultCode;
+  String beanClass;
   String nodeId;
 }

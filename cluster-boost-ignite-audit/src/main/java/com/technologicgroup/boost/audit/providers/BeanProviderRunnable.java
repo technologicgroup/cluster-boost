@@ -15,6 +15,11 @@ class BeanProviderRunnable<T extends Runnable> extends AuditableProvider<Void, T
   }
 
   @Override
+  protected Class<T> getBeanClass() {
+    return beanClass;
+  }
+
+  @Override
   protected Void runBean() {
     getBean(beanClass).run();
     return null;

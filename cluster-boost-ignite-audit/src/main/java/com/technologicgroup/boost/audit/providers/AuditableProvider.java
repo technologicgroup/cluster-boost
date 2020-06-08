@@ -25,14 +25,15 @@ abstract class AuditableProvider<R, T> {
   protected T getBean(Class<T> beanClass) {
     return ContextHolder.getContext().getBean(beanClass);
   }
+  protected abstract Class<T> getBeanClass();
 
-  public void startAudit(Class<?> beanClass, String trackingId) {
+  public void startAudit(String trackingId) {
     this.trackingId = trackingId;
 
     AuditData auditData = new AuditData(
         trackingId,
         new Timestamp(System.currentTimeMillis()),
-        beanClass.getSimpleName(),
+        getBeanClass().getSimpleName(),
         getNodeId());
 
     getDataService().put(auditData.getTrackingId(), auditData);
@@ -47,7 +48,6 @@ abstract class AuditableProvider<R, T> {
 
   protected R process() {
     Timestamp start = new Timestamp(System.currentTimeMillis());
-    Timestamp end;
     String message = null;
     String detailedMessage = null;
     int resultCode = 0;
@@ -62,7 +62,7 @@ abstract class AuditableProvider<R, T> {
       detailedMessage = e.getCause().toString();
       throw e;
     } finally {
-      end = new Timestamp(System.currentTimeMillis());
+      Timestamp end = new Timestamp(System.currentTimeMillis());
 
       AuditNodeItem auditNodeItem = new AuditNodeItem(
           UUID.randomUUID().toString(),
@@ -72,6 +72,7 @@ abstract class AuditableProvider<R, T> {
           message,
           detailedMessage,
           resultCode,
+          getBeanClass().getSimpleName(),
           getNodeId());
 
       getItemService().put(auditNodeItem.getId(), auditNodeItem);

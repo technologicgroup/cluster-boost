@@ -17,6 +17,11 @@ class BeanProviderTask<A, R, T extends ClusterTask<A, R>> extends AuditableProvi
   }
 
   @Override
+  protected Class<T> getBeanClass() {
+    return beanClass;
+  }
+
+  @Override
   protected R runBean() {
     return getBean(beanClass).run(arg);
   }

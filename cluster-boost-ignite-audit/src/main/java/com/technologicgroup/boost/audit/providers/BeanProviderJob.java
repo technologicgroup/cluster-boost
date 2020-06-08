@@ -1,6 +1,5 @@
 package com.technologicgroup.boost.audit.providers;
 
-import com.technologicgroup.boost.common.ContextHolder;
 import com.technologicgroup.boost.core.ClusterJob;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +13,11 @@ class BeanProviderJob<R, T extends ClusterJob<R>> extends AuditableProvider<R, T
   @Override
   public R call() {
     return process();
+  }
+
+  @Override
+  protected Class<T> getBeanClass() {
+    return beanClass;
   }
 
   @Override

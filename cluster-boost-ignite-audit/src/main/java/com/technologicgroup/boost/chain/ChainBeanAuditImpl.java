@@ -32,27 +32,38 @@ class ChainBeanAuditImpl<A, R> implements ChainBean<A, R> {
       if (chainItem.getBean() != null) {
         ClusterTask clusterTask = context.getBean(chainItem.getBean());
 
-        if (clusterTask == null) {
-          throw new RuntimeException("Cannot find bean class: " + chainItem.getBean());
+        String message = null;
+        String detailedMessage = null;
+        int resultCode = 0;
+        Timestamp start = new Timestamp(System.currentTimeMillis());
+
+        try {
+          if (clusterTask == null) {
+            throw new RuntimeException("Cannot find bean class: " + chainItem.getBean());
+          }
+          result = clusterTask.run(result);
+        } catch (Exception e) {
+          message = e.getMessage();
+          detailedMessage = e.getCause().toString();
+          resultCode = 100;
+          throw e;
+        } finally {
+          Timestamp end = new Timestamp(System.currentTimeMillis());
+
+          AuditNodeItem auditNodeItem = new AuditNodeItem(
+              UUID.randomUUID().toString(),
+              trackingId,
+              start,
+              end,
+              message,
+              detailedMessage,
+              resultCode,
+              chainItem.getBean().getSimpleName(),
+              cluster.getLocalNode()
+          );
+          nodeItemAccessor.put(auditNodeItem.getId(), auditNodeItem);
         }
 
-        Timestamp start = new Timestamp(System.currentTimeMillis());
-        //TODO: Catch exception
-        result = clusterTask.run(result);
-
-        Timestamp end = new Timestamp(System.currentTimeMillis());
-
-        AuditNodeItem auditNodeItem = new AuditNodeItem(
-            UUID.randomUUID().toString(),
-            trackingId,
-            start,
-            end,
-            null,
-            null,
-            0,
-            cluster.getLocalNode()
-        );
-        nodeItemAccessor.put(auditNodeItem.getId(), auditNodeItem);
       }
     }
     return (R)result;

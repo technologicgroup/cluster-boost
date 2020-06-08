@@ -18,4 +18,9 @@ public class ClusterAuditConfig {
   public BeanProviderFactory beanProviderFactory() {
       return new BeanProviderAuditFactory();
   }
+
+  @Bean
+  public AuditService auditService(AuditDataAccessor dataAccessor, AuditNodeItemAccessor itemAccessor) {
+    return new AuditService(dataAccessor, itemAccessor);
+  }
 }
