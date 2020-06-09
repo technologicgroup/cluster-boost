@@ -1,5 +1,6 @@
 package com.technologicgroup.boost.chain;
 
+import com.technologicgroup.boost.core.Cluster;
 import com.technologicgroup.boost.core.ClusterTask;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,7 @@ class ChainBeanImpl<A, R> implements ChainBean<A, R> {
   private final ApplicationContext context;
 
   @Override
-  public R run(@NotNull ChainArgument<A> chainArgument) {
+  public ChainResult<R> run(@NotNull ChainArgument<A> chainArgument) {
     Object result = chainArgument.getArg();
 
     for (ChainStep<?, ?> chainItem : chainArgument.getItems()) {
@@ -25,10 +26,19 @@ class ChainBeanImpl<A, R> implements ChainBean<A, R> {
         if (clusterTask == null) {
           throw new RuntimeException("Cannot find bean class: " + chainItem.getBean());
         }
+
         result = clusterTask.run(result);
+
+        // Interrupt chain if filter does not match
+        if (clusterTask instanceof FilterBean) {
+          if (result == null) {
+            break;
+          }
+        }
+
       }
     }
-    return (R)result;
+    return new ChainResult<>(context.getBean(Cluster.class).getLocalNode(), (R)result);
   }
 
 }

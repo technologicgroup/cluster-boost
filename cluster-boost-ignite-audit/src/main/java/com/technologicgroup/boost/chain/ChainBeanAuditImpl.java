@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.Optional;
 import java.util.UUID;
 
 @Primary
@@ -24,7 +25,7 @@ class ChainBeanAuditImpl<A, R> implements ChainBean<A, R> {
   private final Cluster cluster;
 
   @Override
-  public R run(@NotNull ChainArgument<A> chainArgument) {
+  public ChainResult<R> run(@NotNull ChainArgument<A> chainArgument) {
     Object result = chainArgument.getArg();
     String trackingId = chainArgument.getTrackingId();
 
@@ -42,9 +43,17 @@ class ChainBeanAuditImpl<A, R> implements ChainBean<A, R> {
             throw new RuntimeException("Cannot find bean class: " + chainItem.getBean());
           }
           result = clusterTask.run(result);
+
+          // Interrupt chain if filter does not match
+          if (clusterTask instanceof FilterBean) {
+            if (result == null) {
+              break;
+            }
+          }
+
         } catch (Exception e) {
           message = e.getMessage();
-          detailedMessage = e.getCause().toString();
+          detailedMessage = Optional.ofNullable(e.getCause()).map(Throwable::toString).orElse(null);
           resultCode = 100;
           throw e;
         } finally {
@@ -66,7 +75,7 @@ class ChainBeanAuditImpl<A, R> implements ChainBean<A, R> {
 
       }
     }
-    return (R)result;
+    return new ChainResult<> (cluster.getLocalNode(), (R)result);
   }
 
 }

@@ -1,12 +1,17 @@
 package com.technologicgroup.boost.chain;
 
+import com.technologicgroup.boost.core.ClusterGroup;
 import com.technologicgroup.boost.core.ClusterTask;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Chain step class contains necessary information of the task bean
@@ -25,9 +30,9 @@ public class ChainStep<A, R> {
 
   /**
    * Runs all steps for the chain
-   * @return a collection of results. One result for one node.
+   * @return a collection of chain results. One result for one node.
    */
-  public Collection<R> run() {
+  public Collection<ChainResult<R>> run() {
     return chain.run();
   }
 
@@ -38,7 +43,12 @@ public class ChainStep<A, R> {
    * @return the result object
    */
   public <Res> Res collect(Function<Collection<R>, Res> function) {
-    return function.apply(chain.run());
+    List<R> collection = chain.run().stream()
+        .map(ChainResult::getResult)
+        .map(r -> (R)r)
+        .collect(Collectors.toList());
+
+    return function.apply(collection);
   }
 
   /**
@@ -53,9 +63,10 @@ public class ChainStep<A, R> {
    * @return the next chain step
    */
   public <Res, NR> ChainStep<Res, NR> reduce(Function<Collection<R>, Res> function) {
-    Collection<R> results = chain.run();
-    chain.arg = function.apply(results);
-    return new ChainStep<>(null, chain);
+    chain.arg = collect(function);
+    ChainStep<Res, NR> step = new ChainStep<>(null, chain);
+    chain.steps.add(step);
+    return step;
   }
 
   /**
@@ -71,7 +82,9 @@ public class ChainStep<A, R> {
   public <Any, Res, T extends ClusterTask<Any, Res>> ChainStep<Any, Res> reduce(Class<T> bean) {
     chain.run();
     chain.arg = null;
-    return new ChainStep<>(bean, chain);
+    ChainStep<Any, Res> step = new ChainStep<>(bean, chain);
+    chain.steps.add(step);
+    return step;
   }
 
   /**
@@ -88,9 +101,10 @@ public class ChainStep<A, R> {
    */
   public <Res, NR, T extends ClusterTask<Res, NR>> ChainStep<Res, NR> reduce(Function<Collection<R>, Res> function,
                                                                              Class<T> bean) {
-    Collection<R> results = chain.run();
-    chain.arg = function.apply(results);
-    return new ChainStep<>(bean, chain);
+    chain.arg = collect(function);
+    ChainStep<Res, NR> step = new ChainStep<>(bean, chain);
+    chain.steps.add(step);
+    return step;
   }
 
   /**
@@ -106,4 +120,26 @@ public class ChainStep<A, R> {
     return step;
   }
 
+
+  /**
+   * Filters cluster nodes by results of the chain steps
+   * To perform this operation chain runs steps on every node for a result
+   * After that next step on every node will be performed with a related to the node result
+   * @param predicate performs to all node results to filter nodes
+   * @return a new chain step with
+   */
+  public ChainStep<R, R> filter(Predicate<ChainResult<R>> predicate) {
+    List<ChainResult<R>> results = run().stream()
+        .filter(predicate)
+        .collect(Collectors.toList());
+
+    Set<String> nodeList = results.stream()
+        .map(ChainResult::getNodeId)
+        .collect(Collectors.toSet());
+
+    chain.clusterGroup = new ClusterGroup(nodeList);
+    chain.arg = results;
+
+    return map(FilterBean.class);
+  }
 }

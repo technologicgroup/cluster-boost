@@ -34,18 +34,20 @@ public class ClusterReadyConsumer implements ApplicationListener<ClusterReadyEve
     testRepository.put(new TestKey(idPrefix + 1), new TestValue("1"));
 
     if (cluster.isFirstNode()) {
+      String firstNode = cluster.getLocalNode();
       cluster.execute(() -> log.info("TEST Cluster run"));
       int result = cluster.runBean(RunnableBean.class, "<Test Argument>").iterator().next();
       log.info("TEST Cluster run result: {}", result);
 
       String trackingId = UUID.randomUUID().toString();
-      boolean boolResult = Chain.of(cluster)
+      boolean allNodesHasData = Chain.of(cluster)
           .track(trackingId)
           .map(RunnableBean.class, "Chain argument")
           .map(TaskBean.class)
-          .run().iterator().next();
+          .filter(p -> p.getNodeId().equals(firstNode))  // After filtering all steps will be performed only to 1st node
+          .collect(c -> c.stream().allMatch(Boolean::booleanValue));
 
-      log.info("TEST Cluster chain run result: {}", boolResult);
+      log.info("TEST Cluster chain run result: {}", allNodesHasData);
 
       log.info("Collected audit data: {}", auditService.getData(trackingId).toString());
       log.info("Collected audit data items: {}", auditService.getItems(trackingId).values().toString());

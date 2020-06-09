@@ -3,7 +3,6 @@ package com.technologicgroup.boost.common;
 import com.technologicgroup.boost.core.ClusterGroup;
 import com.technologicgroup.boost.core.ClusterRepository;
 
-import lombok.RequiredArgsConstructor;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.cache.CacheMode;
@@ -18,10 +17,10 @@ import java.util.stream.Collectors;
 
 import javax.cache.Cache;
 
-@RequiredArgsConstructor
 public abstract class CommonRepository<K, V> implements ClusterRepository<K, V> {
 
   private CacheConfiguration<K, V> configuration;
+  private Ignite ignite;
 
   @Override
   public String getName() {
@@ -31,7 +30,7 @@ public abstract class CommonRepository<K, V> implements ClusterRepository<K, V> 
   @Override
   public ClusterGroup getClusterGroup() {
     org.apache.ignite.cluster.ClusterGroup
-        clusterGroup = ContextHolder.getContext().getBean(Ignite.class).cluster().forCacheNodes(cache().getName());
+        clusterGroup = ignite().cluster().forCacheNodes(cache().getName());
 
     Set<String> ids = clusterGroup.nodes()
             .stream()
@@ -44,7 +43,7 @@ public abstract class CommonRepository<K, V> implements ClusterRepository<K, V> 
 
   @Override
   public ClusterGroup getClusterGroup(Set<K> keys) {
-    Affinity<K> affinity = ContextHolder.getContext().getBean(Ignite.class).affinity(cache().getName());
+    Affinity<K> affinity = ignite().affinity(cache().getName());
 
     Set<String> ids = keys.stream().map(affinity::mapKeyToNode)
             .map(ClusterNode::id)
@@ -103,6 +102,13 @@ public abstract class CommonRepository<K, V> implements ClusterRepository<K, V> 
     return configuration;
   }
 
+  synchronized Ignite ignite() {
+    if (ignite == null) {
+      ignite = ContextHolder.getContext().getBean(Ignite.class);
+    }
+    return ignite;
+  }
+
   protected CacheConfiguration<K, V> createCacheConfiguration() {
     CacheConfiguration<K, V> result = new CacheConfiguration<>();
     result.setCacheMode(CacheMode.PARTITIONED);
@@ -123,7 +129,7 @@ public abstract class CommonRepository<K, V> implements ClusterRepository<K, V> 
   }
 
   IgniteCache<K, V> cache() {
-    return ContextHolder.getContext().getBean(Ignite.class).cache(getConfiguration().getName());
+    return ignite().cache(getConfiguration().getName());
   }
 
   private Iterable<Cache.Entry<K, V>> getAllLocalIterable() {

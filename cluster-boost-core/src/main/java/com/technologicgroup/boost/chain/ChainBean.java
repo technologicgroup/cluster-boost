@@ -7,6 +7,6 @@ import com.technologicgroup.boost.core.ClusterTask;
  * @param <A> is a class of the first chain step's argument
  * @param <R> is a class of the result of the chain tasks
  */
-public interface ChainBean<A, R> extends ClusterTask<ChainArgument<A>, R> {
+public interface ChainBean<A, R> extends ClusterTask<ChainArgument<A>, ChainResult<R>> {
 
 }

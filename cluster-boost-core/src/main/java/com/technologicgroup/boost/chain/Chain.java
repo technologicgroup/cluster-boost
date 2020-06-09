@@ -21,8 +21,8 @@ import java.util.List;
 public class Chain {
 
   private final Cluster cluster;
-  private ClusterGroup clusterGroup;
   private String trackingId;
+  ClusterGroup clusterGroup;
   Object arg;
 
   List<ChainStep<?, ?>> steps = new ArrayList<>();
@@ -82,12 +82,15 @@ public class Chain {
     return step;
   }
 
-  <R> Collection<R> run() {
+  <R> Collection<ChainResult<R>> run() {
+    Collection<ChainResult<R>> result;
     if (clusterGroup == null) {
-      return cluster.runBean(ChainBean.class, new ChainArgument(arg, steps, trackingId));
+      result = cluster.runBean(ChainBean.class, new ChainArgument(arg, steps, trackingId));
     } else {
-      return cluster.runBean(clusterGroup, ChainBean.class, new ChainArgument(arg, steps, trackingId));
+      result = cluster.runBean(clusterGroup, ChainBean.class, new ChainArgument(arg, steps, trackingId));
     }
+    steps.clear();
+    return result;
   }
 
 }
