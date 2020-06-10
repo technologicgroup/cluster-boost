@@ -2,6 +2,7 @@ package com.technologicgroup.boost.common;
 
 import com.technologicgroup.boost.chain.ChainConfig;
 import com.technologicgroup.boost.common.providers.BeanProviderFactory;
+import com.technologicgroup.boost.common.providers.ProvidersConfig;
 import com.technologicgroup.boost.core.Cluster;
 
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,12 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-@ComponentScan(basePackageClasses = { ContextHolder.class, ClusterProperties.class, ChainConfig.class })
+@ComponentScan(basePackageClasses = {
+    ContextHolder.class,
+    ClusterProperties.class,
+    ChainConfig.class,
+    ProvidersConfig.class
+})
 public class ClusterConfig {
 
   private final ClusterProperties clusterProperties;

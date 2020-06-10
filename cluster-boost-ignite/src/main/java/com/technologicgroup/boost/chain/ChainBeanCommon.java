@@ -17,11 +17,11 @@ import java.util.Optional;
  */
 @Slf4j
 @Service
-class ChainBeanImpl<A, R> extends ChainBean<A, R> {
+class ChainBeanCommon<A, R> extends ChainBean<A, R> {
 
   protected final ApplicationContext context;
 
-  public ChainBeanImpl(Cluster cluster, ApplicationContext context) {
+  public ChainBeanCommon(Cluster cluster, ApplicationContext context) {
     super(cluster);
     this.context = context;
   }

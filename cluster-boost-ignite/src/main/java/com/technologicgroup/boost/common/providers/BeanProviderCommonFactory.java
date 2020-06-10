@@ -6,8 +6,13 @@ import org.apache.ignite.lang.IgniteCallable;
 import org.apache.ignite.lang.IgniteRunnable;
 import org.springframework.stereotype.Service;
 
+/**
+ * Bean providers factory
+ * Bean provider is an object that can be picked up by Ignite and broadcast for execution to set of nodes
+ * The bean provider holds a bean class that will be executed on a every node from the set of nodes
+ */
 @Service
-class BeanProviderFactoryImpl implements BeanProviderFactory {
+class BeanProviderCommonFactory implements BeanProviderFactory {
 
   @Override
   public <T extends Runnable> IgniteRunnable getRunnable(Class<T> bean) {

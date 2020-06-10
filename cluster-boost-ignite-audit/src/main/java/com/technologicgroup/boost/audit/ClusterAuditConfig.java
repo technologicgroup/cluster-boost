@@ -9,6 +9,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
+/**
+ * Package configuration
+ */
 @Configuration
 @ComponentScan(basePackageClasses = { ServiceConfig.class, ChainAuditConfig.class })
 public class ClusterAuditConfig {

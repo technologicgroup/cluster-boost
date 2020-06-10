@@ -14,11 +14,11 @@ import java.util.UUID;
 @Primary
 @Slf4j
 @Service
-class ChainBeanAuditImpl<A, R> extends ChainBeanImpl<A, R> {
+class ChainBeanAudit<A, R> extends ChainBeanCommon<A, R> {
 
   private final AuditItemAccessor nodeItemAccessor;
 
-  public ChainBeanAuditImpl(Cluster cluster, ApplicationContext context, AuditItemAccessor nodeItemAccessor) {
+  public ChainBeanAudit(Cluster cluster, ApplicationContext context, AuditItemAccessor nodeItemAccessor) {
     super(cluster, context);
     this.nodeItemAccessor = nodeItemAccessor;
   }

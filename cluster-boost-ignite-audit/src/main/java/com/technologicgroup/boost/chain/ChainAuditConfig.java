@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
  * Package configuration
  */
 @Configuration
-@ComponentScan(basePackageClasses = { ChainBeanAuditImpl.class })
+@ComponentScan(basePackageClasses = { ChainBeanAudit.class })
 public class ChainAuditConfig {
 
 }

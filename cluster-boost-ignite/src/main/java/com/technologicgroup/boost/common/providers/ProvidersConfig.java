@@ -1,4 +1,4 @@
-package com.technologicgroup.boost.chain;
+package com.technologicgroup.boost.common.providers;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
  * Package configuration
  */
 @Configuration
-@ComponentScan(basePackageClasses = { ChainBeanCommon.class, ChainFilterBeanImpl.class })
-public class ChainConfig {
+@ComponentScan(basePackageClasses = { BeanProviderCommonFactory.class })
+public class ProvidersConfig {
 
 }
