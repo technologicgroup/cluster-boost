@@ -140,6 +140,6 @@ public class ChainStep<A, R> {
     chain.clusterGroup = new ClusterGroup(nodeList);
     chain.arg = results;
 
-    return map(FilterBean.class);
+    return map(ChainFilterBean.class);
   }
 }

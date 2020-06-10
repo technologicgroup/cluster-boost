@@ -30,7 +30,7 @@ class ChainBeanImpl<A, R> implements ChainBean<A, R> {
         result = clusterTask.run(result);
 
         // Interrupt chain if filter does not match
-        if (clusterTask instanceof FilterBean) {
+        if (clusterTask instanceof ChainFilterBean) {
           if (result == null) {
             break;
           }

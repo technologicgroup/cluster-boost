@@ -4,7 +4,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan(basePackageClasses = { ChainBeanImpl.class, FilterBeanImpl.class })
+@ComponentScan(basePackageClasses = { ChainBeanImpl.class, ChainFilterBeanImpl.class })
 public class ChainConfig {
 
 }

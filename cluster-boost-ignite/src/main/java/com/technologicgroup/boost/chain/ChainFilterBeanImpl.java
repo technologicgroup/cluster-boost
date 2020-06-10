@@ -8,7 +8,7 @@ import java.util.Collection;
 
 @Service
 @RequiredArgsConstructor
-class FilterBeanImpl<A> implements FilterBean<A> {
+class ChainFilterBeanImpl<A> implements ChainFilterBean<A> {
 
   private final Cluster cluster;
 
