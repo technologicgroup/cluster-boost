@@ -6,6 +6,7 @@ import com.technologicgroup.boost.core.Cluster;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Timestamp;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -29,7 +30,7 @@ abstract class AuditableProvider<R, T> {
 
     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
-    AuditTaskInfo taskInfo = new AuditTaskInfo(timestamp, timestamp, null, null, 0, getClass());
+    AuditTaskInfo taskInfo = new AuditTaskInfo(timestamp, timestamp, null, null, getClass());
 
     AuditItem item = new AuditItem(
         UUID.randomUUID().toString(),
@@ -52,22 +53,19 @@ abstract class AuditableProvider<R, T> {
 
     String message = null;
     String detailedMessage = null;
-    int resultCode = 0;
 
     R result;
     try {
       result = runBean();
     } catch (Exception e) {
       log.error(e.getMessage(), e);
-      resultCode = 100;
       message = e.getMessage();
-      detailedMessage = e.getCause().toString();
+      detailedMessage = Optional.ofNullable(e.getCause()).map(Throwable::toString).orElse(null);
       throw e;
     } finally {
       Timestamp end = new Timestamp(System.currentTimeMillis());
 
-      AuditTaskInfo taskInfo = new AuditTaskInfo(start, end, message, detailedMessage, resultCode, getBeanClass());
-
+      AuditTaskInfo taskInfo = new AuditTaskInfo(start, end, message, detailedMessage, getBeanClass());
       AuditItem auditItem = new AuditItem(
           UUID.randomUUID().toString(),
           trackingId,

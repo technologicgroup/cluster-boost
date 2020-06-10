@@ -14,41 +14,37 @@ import java.util.UUID;
 @Primary
 @Slf4j
 @Service
-class ChainBeanAuditImpl<A, R> extends ChainBean<A, R> {
+class ChainBeanAuditImpl<A, R> extends ChainBeanImpl<A, R> {
 
-  private final ApplicationContext context;
   private final AuditItemAccessor nodeItemAccessor;
 
   public ChainBeanAuditImpl(Cluster cluster, ApplicationContext context, AuditItemAccessor nodeItemAccessor) {
-    super(cluster);
-    this.context = context;
+    super(cluster, context);
     this.nodeItemAccessor = nodeItemAccessor;
   }
 
-  @Override
-  protected <T> T getBean(Class<T> bean) {
-    return context.getBean(bean);
-  }
-
+  /**
+   * Creates an audit item on a bean execution finished
+   * @param trackingId is the tracking identifier
+   * @param start is the start execution timestamp
+   * @param end is the end of execution timestamp
+   * @param message is a failure message if execution fails and {#code=null} otherwise
+   * @param detailedMessage is a detailed failure message
+   * @param bean is a bean that was finished execution on local node
+   */
   @Override
   protected void onFinishBean(String trackingId, Timestamp start, Timestamp end, String message, String detailedMessage,
-                              int resultCode, Class<? extends ClusterTask<?, ?>> bean, String localNode) {
+                              Class<? extends ClusterTask<?, ?>> bean) {
 
-    log.info("{}", String.format("Bean %s on node %s has finished with code %d. TrackingId: %s", bean, localNode, resultCode, trackingId));
+    super.onFinishBean(trackingId, start, end, message, detailedMessage, bean);
 
-    AuditTaskInfo taskInfo = new AuditTaskInfo(start, end, message, detailedMessage, resultCode, bean);
-
+    AuditTaskInfo taskInfo = new AuditTaskInfo(start, end, message, detailedMessage, bean);
     AuditItem auditItem = new AuditItem(
         UUID.randomUUID().toString(),
         trackingId,
         taskInfo,
-        localNode
+        cluster.getLocalNode()
     );
     nodeItemAccessor.put(auditItem.getId(), auditItem);
-  }
-
-  @Override
-  protected void onStartBean(String trackingId, Timestamp start, Class<? extends ClusterTask<?, ?>> bean, String localNode) {
-    log.info("{}", String.format("Bean %s on node %s has started. TrackingId %s", bean, localNode, trackingId));
   }
 }

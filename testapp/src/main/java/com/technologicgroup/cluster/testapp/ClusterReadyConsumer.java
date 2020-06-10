@@ -48,7 +48,7 @@ public class ClusterReadyConsumer implements ApplicationListener<ClusterReadyEve
           .collect(c -> c.stream().allMatch(Boolean::booleanValue));
 
       log.info("TEST Cluster chain run result: {}", allNodesHasData);
-      log.info("Collected audit data items: {}", auditService.getItems(trackingId).toString());
+      log.info("Collected audit items: {}", auditService.getItems(trackingId).toString());
     }
   }
 }

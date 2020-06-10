@@ -82,6 +82,12 @@ public class Chain {
     return step;
   }
 
+  /**
+   * Runs step by step list of beans on every node from defined cluster group.
+   * If cluster group is not defined chain steps will be performed to every node on the cluster
+   * @param <R> is a class of the result of running steps
+   * @return a collection of result objects
+   */
   <R> Collection<ChainResult<R>> run() {
     Collection<ChainResult<R>> result;
     if (clusterGroup == null) {

@@ -6,5 +6,11 @@ package com.technologicgroup.boost.core;
  * @param <R> is a result class of the task
  */
 public interface ClusterTask<A, R> {
+
+  /**
+   * Method run will be executed on a local node
+   * @param arg is a task argument
+   * @return the result of local task execution
+   */
   R run(A arg);
 }
