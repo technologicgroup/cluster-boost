@@ -7,7 +7,7 @@ import org.apache.ignite.lang.IgniteCallable;
 
 @Slf4j
 @RequiredArgsConstructor
-class BeanProviderJob<R, T extends ClusterJob<R>> extends AuditableProvider<R, T> implements IgniteCallable<R> {
+class BeanProviderAuditJob<R, T extends ClusterJob<R>> extends BeanProviderAudit<R, T> implements IgniteCallable<R> {
   private final Class<T> beanClass;
 
   @Override

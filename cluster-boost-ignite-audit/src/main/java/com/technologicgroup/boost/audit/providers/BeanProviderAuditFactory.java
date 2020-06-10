@@ -15,14 +15,14 @@ public class BeanProviderAuditFactory implements BeanProviderFactory {
 
   @Override
   public <T extends Runnable> IgniteRunnable getRunnable(Class<T> bean) {
-    BeanProviderRunnable<T> provider = new BeanProviderRunnable<>(bean);
+    BeanProviderAuditRunnable<T> provider = new BeanProviderAuditRunnable<>(bean);
     provider.startAudit(UUID.randomUUID().toString());
     return provider;
   }
 
   @Override
   public <R, T extends ClusterJob<R>> IgniteCallable<R> getJob(Class<T> bean) {
-    BeanProviderJob<R, T> provider = new BeanProviderJob<>(bean);
+    BeanProviderAuditJob<R, T> provider = new BeanProviderAuditJob<>(bean);
     provider.startAudit(UUID.randomUUID().toString());
     return provider;
   }

@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
-abstract class AuditableProvider<R, T> {
+abstract class BeanProviderAudit<R, T> {
   protected String trackingId;
 
   private AuditItemAccessor getAuditAccessor() {

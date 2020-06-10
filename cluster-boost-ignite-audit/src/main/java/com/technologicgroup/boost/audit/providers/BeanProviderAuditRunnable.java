@@ -6,7 +6,7 @@ import org.apache.ignite.lang.IgniteRunnable;
 
 @Slf4j
 @RequiredArgsConstructor
-class BeanProviderRunnable<T extends Runnable> extends AuditableProvider<Void, T> implements IgniteRunnable {
+class BeanProviderAuditRunnable<T extends Runnable> extends BeanProviderAudit<Void, T> implements IgniteRunnable {
   private final Class<T> beanClass;
 
   @Override

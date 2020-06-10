@@ -136,5 +136,9 @@ public interface Cluster {
    */
   boolean isFirstNode();
 
+  /**
+   * Returns a local node identifier
+   * @return node identifier
+   */
   String getLocalNode();
 }
