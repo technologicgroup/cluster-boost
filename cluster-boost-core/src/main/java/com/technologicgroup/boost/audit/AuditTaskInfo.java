@@ -5,14 +5,11 @@ import lombok.Value;
 import java.sql.Timestamp;
 
 @Value
-public class AuditNodeItem {
-  String id;
-  String trackingId;
+public class AuditTaskInfo {
   Timestamp start;
   Timestamp end;
   String message;
   String detailedMessage;
   int resultCode;
-  String beanClass;
-  String nodeId;
+  Class<?> beanClass;
 }

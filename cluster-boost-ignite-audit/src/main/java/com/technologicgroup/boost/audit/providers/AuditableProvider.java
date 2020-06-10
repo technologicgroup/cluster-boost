@@ -1,9 +1,6 @@
 package com.technologicgroup.boost.audit.providers;
 
-import com.technologicgroup.boost.audit.AuditData;
-import com.technologicgroup.boost.audit.AuditDataAccessor;
-import com.technologicgroup.boost.audit.AuditNodeItem;
-import com.technologicgroup.boost.audit.AuditNodeItemAccessor;
+import com.technologicgroup.boost.audit.*;
 import com.technologicgroup.boost.common.ContextHolder;
 import com.technologicgroup.boost.core.Cluster;
 import lombok.extern.slf4j.Slf4j;
@@ -15,11 +12,11 @@ import java.util.UUID;
 abstract class AuditableProvider<R, T> {
   protected String trackingId;
 
-  private AuditDataAccessor getDataService() {
-    return ContextHolder.getContext().getBean(AuditDataAccessor.class);
+  private AuditItemAccessor getAuditAccessor() {
+    return ContextHolder.getContext().getBean(AuditItemAccessor.class);
   }
-  protected AuditNodeItemAccessor getItemService() {
-    return ContextHolder.getContext().getBean(AuditNodeItemAccessor.class);
+  protected AuditItemAccessor getItemService() {
+    return ContextHolder.getContext().getBean(AuditItemAccessor.class);
   }
 
   protected T getBean(Class<T> beanClass) {
@@ -30,13 +27,17 @@ abstract class AuditableProvider<R, T> {
   public void startAudit(String trackingId) {
     this.trackingId = trackingId;
 
-    AuditData auditData = new AuditData(
+    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+    AuditTaskInfo taskInfo = new AuditTaskInfo(timestamp, timestamp, null, null, 0, getClass());
+
+    AuditItem item = new AuditItem(
+        UUID.randomUUID().toString(),
         trackingId,
-        new Timestamp(System.currentTimeMillis()),
-        getBeanClass().getSimpleName(),
+        taskInfo,
         getNodeId());
 
-    getDataService().put(auditData.getTrackingId(), auditData);
+    getAuditAccessor().put(item.getId(), item);
   }
 
   protected String getNodeId() {
@@ -48,6 +49,7 @@ abstract class AuditableProvider<R, T> {
 
   protected R process() {
     Timestamp start = new Timestamp(System.currentTimeMillis());
+
     String message = null;
     String detailedMessage = null;
     int resultCode = 0;
@@ -64,18 +66,15 @@ abstract class AuditableProvider<R, T> {
     } finally {
       Timestamp end = new Timestamp(System.currentTimeMillis());
 
-      AuditNodeItem auditNodeItem = new AuditNodeItem(
+      AuditTaskInfo taskInfo = new AuditTaskInfo(start, end, message, detailedMessage, resultCode, getBeanClass());
+
+      AuditItem auditItem = new AuditItem(
           UUID.randomUUID().toString(),
           trackingId,
-          start,
-          end,
-          message,
-          detailedMessage,
-          resultCode,
-          getBeanClass().getSimpleName(),
+          taskInfo,
           getNodeId());
 
-      getItemService().put(auditNodeItem.getId(), auditNodeItem);
+      getItemService().put(auditItem.getId(), auditItem);
     }
     return result;
   }

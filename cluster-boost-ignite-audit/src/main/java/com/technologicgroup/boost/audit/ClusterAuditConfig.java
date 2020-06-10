@@ -20,7 +20,7 @@ public class ClusterAuditConfig {
   }
 
   @Bean
-  public AuditService auditService(AuditDataAccessor dataAccessor, AuditNodeItemAccessor itemAccessor) {
-    return new AuditService(dataAccessor, itemAccessor);
+  public AuditService auditService(AuditItemAccessor itemAccessor) {
+    return new AuditService(itemAccessor);
   }
 }

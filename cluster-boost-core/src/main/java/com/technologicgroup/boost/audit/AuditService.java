@@ -2,19 +2,20 @@ package com.technologicgroup.boost.audit;
 
 import lombok.RequiredArgsConstructor;
 
-import java.util.Map;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class AuditService {
-  private final AuditDataAccessor dataAccessor;
-  private final AuditNodeItemAccessor itemAccessor;
+  private final AuditItemAccessor itemAccessor;
 
-  public AuditData getData(String trackingId) {
-    return dataAccessor.networkGet(trackingId);
-  }
-
-  public Map<String, AuditNodeItem> getItems(String trackingId) {
-    return itemAccessor.find(i -> i.getTrackingId().equals(trackingId));
+  public List<AuditItem> getItems(String trackingId) {
+    return itemAccessor.find(i -> i.getTrackingId().equals(trackingId))
+        .values()
+        .stream()
+        .sorted(Comparator.comparing(c -> c.getTaskInfo().getStart()))
+        .collect(Collectors.toList());
   }
 
 }
