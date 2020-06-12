@@ -9,6 +9,11 @@ import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Abstract base class for bean providers with audit functionality
+ * @param <R>
+ * @param <T>
+ */
 @Slf4j
 abstract class BeanProviderAudit<R, T> {
   protected String trackingId;

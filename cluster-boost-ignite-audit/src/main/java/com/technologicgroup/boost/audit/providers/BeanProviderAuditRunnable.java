@@ -4,6 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ignite.lang.IgniteRunnable;
 
+/**
+ * Runnable provider holds a runnable bean class
+ * This bean will be injected executed on every node from a defined node set
+ * This provider contains audit functionality
+ * @param <T> is a bean class
+ */
 @Slf4j
 @RequiredArgsConstructor
 class BeanProviderAuditRunnable<T extends Runnable> extends BeanProviderAudit<Void, T> implements IgniteRunnable {
