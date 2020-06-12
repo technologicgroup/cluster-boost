@@ -17,16 +17,29 @@ import java.util.stream.Collectors;
 
 import javax.cache.Cache;
 
+/**
+ * Ignite repository implementation
+ * @param <K> key class
+ * @param <V> value class
+ */
 public abstract class CommonRepository<K, V> implements ClusterRepository<K, V> {
 
   private CacheConfiguration<K, V> configuration;
   private Ignite ignite;
 
+  /**
+   * Gets a data storage name that can be used to direct data access
+   * @return a name of the data storage (f.e. in case of Ignite it is a cache name)
+   */
   @Override
   public String getName() {
     return getKeyClass().getSimpleName() + getValueClass().getSimpleName() + "Cache";
   }
 
+  /**
+   * Returns cluster group that contains the data that current repository can access
+   * @return cluster group - a list of nodes containing repository data
+   */
   @Override
   public ClusterGroup getClusterGroup() {
     org.apache.ignite.cluster.ClusterGroup
@@ -41,6 +54,10 @@ public abstract class CommonRepository<K, V> implements ClusterRepository<K, V> 
     return new ClusterGroup(ids);
   }
 
+  /**
+   * Returns cluster group that contains specified keys and related values from current repository
+   * @return cluster group
+   */
   @Override
   public ClusterGroup getClusterGroup(Set<K> keys) {
     Affinity<K> affinity = ignite().affinity(cache().getName());
@@ -53,6 +70,11 @@ public abstract class CommonRepository<K, V> implements ClusterRepository<K, V> 
     return new ClusterGroup(ids);
   }
 
+  /**
+   * Gets a value associated with a key from local node
+   * @param key object
+   * @return a value associated with a key
+   */
   @Override
   public V getLocal(K key) {
     for (Cache.Entry<K, V> entry : getAllLocalIterable()) {
@@ -63,6 +85,11 @@ public abstract class CommonRepository<K, V> implements ClusterRepository<K, V> 
     return null;
   }
 
+  /**
+   * Gets a key/value map form local node
+   * @param keys a set of keys
+   * @return a map of key/value pairs associated with given keys
+   */
   @Override
   public Map<K, V> getLocal(Set<K> keys) {
     Map<K, V> result = new HashMap<>();
@@ -75,6 +102,10 @@ public abstract class CommonRepository<K, V> implements ClusterRepository<K, V> 
     return result;
   }
 
+  /**
+   * Gets all repository data from local node
+   * @return a map of key/value pairs
+   */
   @Override
   public Map<K, V> getAllLocal() {
     Map<K, V> result = new HashMap<>();
@@ -85,11 +116,22 @@ public abstract class CommonRepository<K, V> implements ClusterRepository<K, V> 
     return result;
   }
 
+  /**
+   * Puts a key/value pair to the repository.
+   * Repository cannot guarantee that the pair will be stored on a current local node
+   * @param key object
+   * @param value object
+   */
   @Override
   public void put(K key, V value) {
     cache().put(key, value);
   }
 
+  /**
+   * Puts a key/value pair map to the repository.
+   * Repository cannot guarantee that the map will be stored on a current local node
+   * @param map a key/value map
+   */
   @Override
   public void putAll(Map<K, V> map) {
     cache().putAll(map);

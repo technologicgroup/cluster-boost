@@ -11,6 +11,12 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.UUID;
 
+/**
+ * ChainBean implementation contains execution for chain steps with audit
+ * Every step represents a Spring bean that will be executed on a local node
+ * @param <A> is a class of the first chain step's argument
+ * @param <R> is a class of the result of the chain tasks
+ */
 @Primary
 @Slf4j
 @Service

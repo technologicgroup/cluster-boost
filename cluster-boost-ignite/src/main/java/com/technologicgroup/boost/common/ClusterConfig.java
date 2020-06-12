@@ -21,6 +21,9 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Ignite cluster configuration
+ */
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
@@ -34,6 +37,11 @@ public class ClusterConfig {
 
   private final ClusterProperties clusterProperties;
 
+  /**
+   * Configures Ignite bean
+   * @param igniteConfiguration is the ignite configuration (can be null)
+   * @return Ignite bean
+   */
   @Bean
   public Ignite ignite(IgniteConfiguration igniteConfiguration) {
 
@@ -51,6 +59,14 @@ public class ClusterConfig {
     return Ignition.start(igniteConfiguration);
   }
 
+  /**
+   * Creates Cluster bean for Ignite
+   * @param ignite is Ignite bean
+   * @param repositories is a list of available cluster repositories
+   * @param beanProviderFactory is a bean provider factory bean, using for running beans on cluster
+   * @param publisher is a application event publisher
+   * @return a Cluster bean
+   */
   @Bean
   public Cluster igniteCluster(Ignite ignite,
                                CommonRepository<?, ?>[] repositories,
