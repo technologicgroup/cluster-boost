@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * Static object that hold a link to Spring Application Context and to the Cluster object
@@ -18,6 +19,9 @@ public class ContextHolder {
 
   @Getter
   static ApplicationContext context;
+
+  private static volatile boolean activated;
+  private static final CountDownLatch readyLatch = new CountDownLatch(1);
 
   private static final Object locker = new Object();
 
@@ -42,5 +46,24 @@ public class ContextHolder {
               .map(org.apache.ignite.IgniteCluster::active)
               .orElse(false);
     }
+  }
+
+  public static boolean isActivated() {
+    return activated;
+  }
+
+  static void setActivated() {
+    activated = true;
+    readyLatch.countDown();
+  }
+
+  public static void await() throws InterruptedException {
+    readyLatch.await();
+  }
+
+  public static <T> T getBean(Class<T> bean) {
+    return Optional.ofNullable(getContext())
+        .map(c -> c.getBean(bean))
+        .orElse(null);
   }
 }

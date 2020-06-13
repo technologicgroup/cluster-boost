@@ -20,7 +20,7 @@ class BeanProviderTask<A, R, T extends ClusterTask<A, R>> implements IgniteCalla
   private final A arg;
 
   private T getBean() {
-        return ContextHolder.getContext().getBean(beanClass);
+        return ContextHolder.getBean(beanClass);
     }
 
   @Override

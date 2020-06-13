@@ -16,7 +16,7 @@ class BeanProviderRunnable<T extends Runnable> implements IgniteRunnable {
   private final Class<T> beanClass;
 
   private T getBean() {
-        return ContextHolder.getContext().getBean(beanClass);
+        return ContextHolder.getBean(beanClass);
     }
 
   @Override

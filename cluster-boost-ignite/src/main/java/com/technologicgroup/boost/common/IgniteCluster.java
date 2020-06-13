@@ -5,14 +5,11 @@ import com.technologicgroup.boost.core.*;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ignite.Ignite;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
@@ -28,13 +25,8 @@ class IgniteCluster implements Cluster {
   private final String[] hosts;
   private final int startupTimeout;
   private final BeanProviderFactory beanProviderFactory;
-  private final ApplicationEventPublisher publisher;
-
-  private volatile boolean activated;
 
   private static final int DEFAULT_SLEEP_INTERVAL = 100;
-
-  CountDownLatch readyLatch = new CountDownLatch(1);
 
   /**
    * Run cluster job on cluster group nodes for the result
@@ -189,7 +181,7 @@ class IgniteCluster implements Cluster {
    */
   @Override
   public boolean isActivated() {
-    return activated;
+    return ContextHolder.isActivated();
   }
 
   /**
@@ -198,7 +190,7 @@ class IgniteCluster implements Cluster {
    */
   @Override
   public void waitForReady() throws InterruptedException {
-    readyLatch.await();
+    ContextHolder.await();
   }
 
   /**
@@ -228,7 +220,6 @@ class IgniteCluster implements Cluster {
     return ignite.cluster().localNode().id().toString();
   }
 
-
   @SuppressWarnings("BusyWait")
   void activate() {
     if (isFirstNode()) {
@@ -244,7 +235,7 @@ class IgniteCluster implements Cluster {
           throw new RuntimeException("Cluster startup timed out");
         }
       }
-      execute(this::setIsReady);
+      setIsReady();
     }
   }
 
@@ -256,13 +247,15 @@ class IgniteCluster implements Cluster {
   }
 
   private boolean checkActivationForAllNodes() {
-    if (!activated) {
+    boolean activated = false;
+    if (!ContextHolder.isActivated()) {
       Collection<Boolean> activations = runBean(ReadyDetectorJob.class);
 
       if (activations.size() < hosts.length) {
         log.info("Waiting for all hosts: {} of {} is up", activations.size(), hosts.length);
         return false;
       }
+
       activated = activations.stream()
           .allMatch(v -> Optional.ofNullable(v).orElse(Boolean.FALSE));
     }
@@ -270,9 +263,8 @@ class IgniteCluster implements Cluster {
   }
 
   synchronized void setIsReady() {
-    activated = true;
-    readyLatch.countDown();
-    CompletableFuture.runAsync(() -> publisher.publishEvent(new ClusterReadyEvent(this)));
+    ContextHolder.setActivated();
+    runBean(PublishReadyEventJob.class);
   }
 
 }

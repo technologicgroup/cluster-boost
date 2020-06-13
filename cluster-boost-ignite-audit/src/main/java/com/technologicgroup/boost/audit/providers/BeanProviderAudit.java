@@ -20,20 +20,14 @@ abstract class BeanProviderAudit<R, T> implements Serializable {
   protected String trackingId;
 
   private AuditItemAccessor getAuditAccessor() {
-    return getAnyBean(AuditItemAccessor.class);
+    return ContextHolder.getBean(AuditItemAccessor.class);
   }
   protected AuditItemAccessor getItemService() {
-    return getAnyBean(AuditItemAccessor.class);
+    return ContextHolder.getBean(AuditItemAccessor.class);
   }
 
   protected T getBean(Class<T> beanClass) {
-    return getAnyBean(beanClass);
-  }
-
-  private <RT> RT getAnyBean(Class<RT> beanClass) {
-    return Optional.ofNullable(ContextHolder.getContext())
-        .map(c -> c.getBean(beanClass))
-        .orElse(null);
+    return ContextHolder.getBean(beanClass);
   }
 
   protected abstract Class<T> getBeanClass();
