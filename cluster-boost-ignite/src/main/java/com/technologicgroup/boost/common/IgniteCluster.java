@@ -252,7 +252,7 @@ class IgniteCluster implements Cluster {
       Collection<Boolean> activations = runBean(ReadyDetectorJob.class);
 
       if (activations.size() < hosts.length) {
-        log.info("Waiting for all hosts: {} of {} is up", activations.size(), hosts.length);
+        log.debug("Waiting for all hosts: {} of {} is up", activations.size(), hosts.length);
         return false;
       }
 

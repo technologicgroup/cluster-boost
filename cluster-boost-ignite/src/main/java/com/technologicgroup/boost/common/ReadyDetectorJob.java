@@ -10,7 +10,7 @@ public class ReadyDetectorJob implements ClusterJob<Boolean> {
   @Override
   public Boolean run() {
     boolean isActivated = ContextHolder.isReady();
-    log.info("Cluster node activation {}", isActivated);
+    log.debug("Cluster node activation {}", isActivated);
 
     return isActivated;
   }
