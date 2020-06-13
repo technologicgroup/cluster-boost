@@ -1,8 +1,11 @@
 package com.technologicgroup.boost.common;
 
 import lombok.Getter;
+import org.apache.ignite.Ignite;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Optional;
 
 /**
  * Static object that hold a link to Spring Application Context and to the Cluster object
@@ -32,7 +35,12 @@ public class ContextHolder {
    */
   public static boolean isReady() {
     synchronized (locker) {
-      return cluster != null && context != null;
+      return cluster != null && context != null &&
+          Optional.of(cluster)
+              .map(c -> c.ignite)
+              .map(Ignite::cluster)
+              .map(org.apache.ignite.IgniteCluster::active)
+              .orElse(false);
     }
   }
 }

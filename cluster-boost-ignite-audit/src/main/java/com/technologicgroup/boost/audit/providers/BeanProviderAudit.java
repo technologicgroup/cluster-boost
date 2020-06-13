@@ -5,6 +5,7 @@ import com.technologicgroup.boost.common.ContextHolder;
 import com.technologicgroup.boost.core.Cluster;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.UUID;
@@ -15,19 +16,26 @@ import java.util.UUID;
  * @param <T>
  */
 @Slf4j
-abstract class BeanProviderAudit<R, T> {
+abstract class BeanProviderAudit<R, T> implements Serializable {
   protected String trackingId;
 
   private AuditItemAccessor getAuditAccessor() {
-    return ContextHolder.getContext().getBean(AuditItemAccessor.class);
+    return getAnyBean(AuditItemAccessor.class);
   }
   protected AuditItemAccessor getItemService() {
-    return ContextHolder.getContext().getBean(AuditItemAccessor.class);
+    return getAnyBean(AuditItemAccessor.class);
   }
 
   protected T getBean(Class<T> beanClass) {
-    return ContextHolder.getContext().getBean(beanClass);
+    return getAnyBean(beanClass);
   }
+
+  private <RT> RT getAnyBean(Class<RT> beanClass) {
+    return Optional.ofNullable(ContextHolder.getContext())
+        .map(c -> c.getBean(beanClass))
+        .orElse(null);
+  }
+
   protected abstract Class<T> getBeanClass();
 
   public void startAudit(String trackingId) {
@@ -43,12 +51,14 @@ abstract class BeanProviderAudit<R, T> {
         taskInfo,
         getNodeId());
 
-    getAuditAccessor().put(item.getId(), item);
+    Optional.ofNullable(getAuditAccessor()).ifPresent(a -> a.put(item.getId(), item));
   }
 
   protected String getNodeId() {
-    Cluster cluster = ContextHolder.getContext().getBean(Cluster.class);
-    return cluster.getLocalNode();
+    return Optional.ofNullable(ContextHolder.getContext())
+        .map(c -> c.getBean(Cluster.class))
+        .map(Cluster::getLocalNode)
+        .orElse("Unknown");
   }
 
   protected abstract R runBean();
@@ -77,7 +87,7 @@ abstract class BeanProviderAudit<R, T> {
           taskInfo,
           getNodeId());
 
-      getItemService().put(auditItem.getId(), auditItem);
+      Optional.ofNullable(getItemService()).ifPresent(s -> s.put(auditItem.getId(), auditItem));
     }
     return result;
   }

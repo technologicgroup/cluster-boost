@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
@@ -23,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 class IgniteCluster implements Cluster {
-  private final Ignite ignite;
+  final Ignite ignite;
   private final String[] hosts;
   private final int startupTimeout;
   private final BeanProviderFactory beanProviderFactory;
@@ -256,17 +257,14 @@ class IgniteCluster implements Cluster {
 
   private boolean checkActivationForAllNodes() {
     if (!activated) {
-      Collection<Boolean> activations = run(() -> {
-        boolean isActivated = isLocalNodeActivated();
-        log.info("Cluster node {} activation {}", ignite.cluster().node().hostNames(), isActivated);
-        return isActivated;
-      });
+      Collection<Boolean> activations = runBean(ReadyDetectorJob.class);
 
       if (activations.size() < hosts.length) {
-        log.debug("Waiting for all hosts: {} of {} is up", activations.size(), hosts.length);
+        log.info("Waiting for all hosts: {} of {} is up", activations.size(), hosts.length);
         return false;
       }
-      activated = activations.stream().allMatch(Boolean::booleanValue);
+      activated = activations.stream()
+          .allMatch(v -> Optional.ofNullable(v).orElse(Boolean.FALSE));
     }
     return activated;
   }
@@ -275,16 +273,6 @@ class IgniteCluster implements Cluster {
     activated = true;
     readyLatch.countDown();
     CompletableFuture.runAsync(() -> publisher.publishEvent(new ClusterReadyEvent(this)));
-  }
-
-  synchronized boolean isLocalNodeActivated() {
-    if (ignite == null) {
-      return false;
-    }
-    if (ignite.cluster() == null) {
-      return false;
-    }
-    return ignite.cluster().active() && ContextHolder.isReady();
   }
 
 }

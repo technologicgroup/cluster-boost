@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ignite.lang.IgniteCallable;
 
+import java.util.Optional;
+
 /**
  * Job provider holds a cluster job bean class
  * This bean will be injected and executed on every node from a defined node set
@@ -29,6 +31,6 @@ class BeanProviderAuditJob<R, T extends ClusterJob<R>> extends BeanProviderAudit
 
   @Override
   protected R runBean() {
-    return getBean(beanClass).run();
+    return Optional.ofNullable(getBean(beanClass)).map(ClusterJob::run).orElse(null);
   }
 }

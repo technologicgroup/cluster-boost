@@ -34,7 +34,6 @@ public class ClusterReadyConsumer implements ApplicationListener<ClusterReadyEve
     testRepository.put(new TestKey(idPrefix + 1), new TestValue("1"));
 
     if (cluster.isFirstNode()) {
-      cluster.execute(() -> log.info("TEST Cluster run"));
       int result = cluster.runBean(RunnableBean.class, "<Test Argument>").iterator().next();
       log.info("TEST Cluster run result: {}", result);
 
