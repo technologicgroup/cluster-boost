@@ -23,6 +23,7 @@ When all nodes entered the cluster and cluster is ready for tasks,
 **ClusterReadyEvent** fires on every node of the cluster.
 
 ```java
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ClusterReadyConsumer implements ApplicationListener<ClusterReadyEvent> {
@@ -111,16 +112,17 @@ boolean chainResult = Chain.of(cluster)                         // Line 1
   .collect(c -> c.stream().allMatch(Boolean::booleanValue));    // Line 5
 ```
 
-- Line 1 - define a chain on a cluster
+### Line 1 - define a chain on a cluster
 
 You can also define a cluster group to run a chain
 
-- Line 2 - add a new chain step with **RunnableBean** operation on every node
+### Line 2 - add a new chain step 
 
-The result of this step will be passed as an argument to the next chain step for every node
+The **RunnableBean** operation will be performed on every node, and
+the result of this step will be passed as an argument to the next chain step for every node
 
-- Line 3 - add a new chain step with **TaskBean** operation on every node
-
+### Line 3 - add a new chain step
+ 
 Result of the previous step chain will pass as an argument to the **TaskBean**.
 
 For now no operations on the cluster actually are not running yet but if you say to the chain **run**: 
@@ -129,11 +131,11 @@ For now no operations on the cluster actually are not running yet but if you say
 
 2. **TaskBean** will be executed on this node even if other nodes are still in progress with **RunnableBean**.
 
-- Line 4 - filter operation for a chain
+### Line 4 - filter operation for a chain
 Here we run chain bean tasks (**RunnableBean** -> **TaskBean**) on every node and waiting results.
 After results are available defined predicate will be applied to filter them.
 
 Next chain step will be performed only for nodes that were passed a filter. And in the next bean task will be passed a result 
 of previuos step from Line 3 (**TaskBean** result).
 
-- Line 5 - collect results  
+### Line 5 - collect results  
