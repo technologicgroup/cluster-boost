@@ -32,6 +32,7 @@ public class ClusterReadyConsumer implements ApplicationListener<ClusterReadyEve
   @Override
   public void onApplicationEvent(@NotNull ClusterReadyEvent event) {
     log.info("Cluster is ready: {}", event);
+  }
 }
 ```
 
