@@ -10,7 +10,7 @@
 
 ## Maven dependency
 
-## Common library
+### Common library
 
 ```xml
 <dependency>
@@ -20,7 +20,7 @@
 </dependency>
 ```
 
-## Library with audit support
+### Library with audit support
 
 ```xml
 <dependency>
@@ -30,6 +30,15 @@
 </dependency>
 ```
 
+## Examples
+
+1. [example-01](https://github.com/technologicgroup/cluster-boost/tree/master/examples/example-01) - cluster ready event, self-registered repositories 
+
+1. [example-02](https://github.com/technologicgroup/cluster-boost/tree/master/examples/example-02) - run Spring bean as a cluster task  
+
+1. [example-03](https://github.com/technologicgroup/cluster-boost/tree/master/examples/example-03) - chain running   
+
+1. [example-04](https://github.com/technologicgroup/cluster-boost/tree/master/examples/example-04) - chain running with audit
 
 ## 1. Cluster ready event
 
