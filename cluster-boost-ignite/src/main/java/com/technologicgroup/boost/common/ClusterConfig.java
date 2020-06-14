@@ -13,6 +13,7 @@ import org.apache.ignite.configuration.CacheConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
 import org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -67,11 +68,13 @@ public class ClusterConfig {
    */
   @Bean
   public Cluster igniteCluster(Ignite ignite,
-                               CommonRepository<?, ?>[] repositories,
+                               @Autowired(required = false) CommonRepository<?, ?>[] repositories,
                                BeanProviderFactory beanProviderFactory) {
-    for (CommonRepository<?, ?> repository : repositories) {
-      CacheConfiguration<?, ?> configuration = repository.getConfiguration();
-      ignite.getOrCreateCache(configuration);
+    if (repositories != null) {
+      for (CommonRepository<?, ?> repository : repositories) {
+        CacheConfiguration<?, ?> configuration = repository.getConfiguration();
+        ignite.getOrCreateCache(configuration);
+      }
     }
 
     IgniteCluster igniteCluster = new IgniteCluster(ignite,

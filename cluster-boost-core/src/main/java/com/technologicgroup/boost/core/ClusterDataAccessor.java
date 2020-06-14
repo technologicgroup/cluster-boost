@@ -28,6 +28,12 @@ public interface ClusterDataAccessor<K, V> {
   Map<K, V> networkGet(Set<K> keys);
 
   /**
+   * Gets all key/value pairs form the cluster VIA network
+   * @return all cluster data as a key/value pairs map
+   */
+  Map<K, V> networkGetAll();
+
+  /**
    * Puts a key/value pair to the repository associated with a service.
    * Repository cannot guarantee that the pair will be stored on a current local node
    * @param key object

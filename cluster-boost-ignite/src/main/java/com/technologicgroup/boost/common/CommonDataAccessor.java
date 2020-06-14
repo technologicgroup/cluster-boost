@@ -44,7 +44,16 @@ public abstract class CommonDataAccessor<K, V> implements ClusterDataAccessor<K,
   @Override
   public Map<K, V> networkGet(Set<K> keys) {
     return repository.cache().getAll(keys);
-}
+  }
+
+  /**
+   * Gets all key/value pairs form the cluster VIA network
+   * @return all cluster data as a key/value pairs map
+   */
+  @Override
+  public Map<K, V> networkGetAll() {
+    return find(v -> true);
+  }
 
   /**
    * Puts a key/value pair to the repository associated with a service.
