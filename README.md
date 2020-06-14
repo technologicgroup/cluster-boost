@@ -16,7 +16,7 @@
 <dependency>
     <groupId>com.technologicgroup.cluster</groupId>
     <artifactId>cluster-boost-ignite</artifactId>
-    <version>0.1</version>
+    <version>1.0</version>
 </dependency>
 ```
 
@@ -26,7 +26,7 @@
 <dependency>
     <groupId>com.technologicgroup.cluster</groupId>
     <artifactId>cluster-boost-ignite-audit</artifactId>
-    <version>0.1</version>
+    <version>1.0</version>
 </dependency>
 ```
 
