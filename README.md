@@ -8,6 +8,29 @@
 - Chain running
 - Audit
 
+## Maven dependency
+
+## Common library
+
+```xml
+<dependency>
+    <groupId>com.technologicgroup.cluster</groupId>
+    <artifactId>cluster-boost-ignite</artifactId>
+    <version>0.1</version>
+</dependency>
+```
+
+## Library with audit support
+
+```xml
+<dependency>
+    <groupId>com.technologicgroup.cluster</groupId>
+    <artifactId>cluster-boost-ignite-audit</artifactId>
+    <version>0.1</version>
+</dependency>
+```
+
+
 ## 1. Cluster ready event
 
 Cluster have set of nodes hosted on different hosts.
