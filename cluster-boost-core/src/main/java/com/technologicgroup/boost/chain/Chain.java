@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -93,7 +94,11 @@ public class Chain {
     if (clusterGroup == null) {
       result = cluster.runBean(ChainBean.class, new ChainArgument(arg, steps, trackingId));
     } else {
-      result = cluster.runBean(clusterGroup, ChainBean.class, new ChainArgument(arg, steps, trackingId));
+      if (clusterGroup.getNodes().isEmpty()) {
+        result = Collections.emptySet();
+      } else {
+        result = cluster.runBean(clusterGroup, ChainBean.class, new ChainArgument(arg, steps, trackingId));
+      }
     }
     steps.clear();
     return result;
