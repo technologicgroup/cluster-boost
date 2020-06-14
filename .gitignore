@@ -3,6 +3,8 @@
 cluster-boost-core/target
 cluster-boost-ignite/target
 cluster-boost-ignite-audit/target
-testapp/target
-ignite
 
+/examples/.idea
+/examples/example-01/target
+
+ignite

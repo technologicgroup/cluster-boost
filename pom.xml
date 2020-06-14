@@ -13,7 +13,6 @@
         <module>cluster-boost-core</module>
         <module>cluster-boost-ignite</module>
         <module>cluster-boost-ignite-audit</module>
-        <module>testapp</module>
     </modules>
 
     <properties>
