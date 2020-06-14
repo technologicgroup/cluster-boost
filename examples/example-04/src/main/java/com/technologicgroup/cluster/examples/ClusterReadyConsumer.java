@@ -1,7 +1,5 @@
 package com.technologicgroup.cluster.examples;
 
-import com.technologicgroup.boost.chain.Chain;
-import com.technologicgroup.boost.chain.ChainResult;
 import com.technologicgroup.boost.core.Cluster;
 import com.technologicgroup.boost.common.ClusterReadyEvent;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +21,8 @@ public class ClusterReadyConsumer implements ApplicationListener<ClusterReadyEve
     log.info("Cluster is ready: {}", event);
 
     if (cluster.isFirstNode()) {
-      Collection<ChainResult<String>> results = Chain.of(cluster)
-          .map(ChainBean1.class, "Chain argument")  // Start chain with string argument
-          .filter(r -> r.getResult() == 1)               // Continue chain only for odd nodes
-          .map(ChainBean2.class)                         // On even nodes create a string result
-          .run();                                        // Run chain steps
-
-      log.info("Chain result: {}", results);
+      Collection<Integer> results = cluster.runBean(RunnableBean.class, "<Test Argument>");
+      log.info("Cluster run result: {}", results);
     }
   }
 }
