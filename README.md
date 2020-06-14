@@ -1,4 +1,4 @@
-# cluster-boost library
+# cluster-boost library v. 1.0
 
 ## Main features
 
