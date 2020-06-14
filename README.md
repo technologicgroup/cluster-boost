@@ -87,6 +87,8 @@ public class TestAccessor extends CommonDataAccessor<TestKey, TestValue> {
 }
 ```
 
+**Working application example: [example-01](https://github.com/technologicgroup/cluster-boost/tree/master/examples/example-01)** 
+
 ## 3. Run Spring beans as a cluster tasks
 
 You do not need to define some special classes for a cluster tasks anymore.
@@ -116,6 +118,8 @@ Result from every node will be collected to the collection of results.
 
 In the task bean you can easily autowire any Spring bean you want 
 (f.e. a repository to access local data) without any troubles. 
+
+**Working application example: [example-02](https://github.com/technologicgroup/cluster-boost/tree/master/examples/example-02)** 
 
 ## 4. Chain running
 
@@ -163,3 +167,5 @@ Next chain step will be performed only for nodes that were passed a filter. And 
 of previuos step from Line 3 (**TaskBean** result).
 
 ### Line 5 - collect results  
+
+**Working application example: [example-03](https://github.com/technologicgroup/cluster-boost/tree/master/examples/example-03)** 
