@@ -20,13 +20,18 @@ class BeanProviderTask<A, R, T extends ClusterTask<A, R>> implements IgniteCalla
   private final A arg;
 
   private T getBean() {
-        return ContextHolder.getBean(beanClass);
-    }
+    return ContextHolder.getBean(beanClass);
+  }
 
   @Override
   public R call() {
     try {
-      return getBean().run(arg);
+      T bean = getBean();
+      if (bean == null) {
+        log.warn("Job execution failed. {} not found", beanClass);
+        return null;
+      }
+      return bean.run(arg);
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       throw e;

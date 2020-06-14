@@ -22,7 +22,12 @@ class BeanProviderRunnable<T extends Runnable> implements IgniteRunnable {
   @Override
   public void run() {
     try {
-      getBean().run();
+      T bean = getBean();
+      if (bean == null) {
+        log.warn("Runnable execution failed. {} not found", beanClass);
+        return;
+      }
+      bean.run();
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       throw e;

@@ -26,7 +26,12 @@ class BeanProviderJob<R, T extends ClusterJob<R>> implements IgniteCallable<R> {
   @Override
   public R call() {
     try {
-      return Optional.ofNullable(getBean()).map(ClusterJob::run).orElse(null);
+      T bean = getBean();
+      if (bean == null) {
+        log.warn("Job execution failed. {} not found", beanClass);
+        return null;
+      }
+      return bean.run();
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       throw e;
