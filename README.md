@@ -1,5 +1,8 @@
 # cluster-boost library v. 1.0
 
+## Description
+Full Spring-integrated solution for Ignite cluster that helps to implement your first flexible Ignite cluster easily.
+
 ## Main features
 
 - Cluster ready event
