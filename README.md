@@ -5,11 +5,11 @@ Full Spring-integrated solution for Ignite cluster that helps to implement your 
 
 ## Main features
 
-- [Cluster ready event](https://github.com/technologicgroup/cluster-boost#1-cluster-ready-event)
-- [Self registered repositories](https://github.com/technologicgroup/cluster-boost#2-self-registered-repositories)
-- [Run Spring beans as a cluster tasks](https://github.com/technologicgroup/cluster-boost#3-run-spring-beans-as-a-cluster-tasks)
-- [Chain running](https://github.com/technologicgroup/cluster-boost#4-chain-running)
-- Audit
+- [Cluster ready event](#1-cluster-ready-event)
+- [Self registered repositories](#2-self-registered-repositories)
+- [Run Spring beans as a cluster tasks](#3-run-spring-beans-as-a-cluster-tasks)
+- [Chain running](#4-chain-running)
+- [Audit](#5-audit)
 
 ## Maven dependency
 
@@ -181,3 +181,48 @@ of previuos step from Line 3 (**TaskBean** result).
 ### Line 5 - collect results  
 
 **Working application example: [example-03](https://github.com/technologicgroup/cluster-boost/tree/master/examples/example-03)** 
+
+## Audit
+
+To track running beans on cluster substitute common library with audit version
+
+```xml
+<dependency>
+    <groupId>com.technologicgroup.cluster</groupId>
+    <artifactId>cluster-boost-ignite-audit</artifactId>
+    <version>1.0</version>
+</dependency>
+```
+
+This will provide access to tracking data VIA **AuditService** that you can inject to any Spring bean:  
+
+```java
+private final AuditService auditService;
+```
+
+All running beans will be tracked by default with random UUID, but you can specify it by implementing Trackable interface for bean arguments:
+
+```java
+import lombok.AllArgsConstructor;@Data
+@AllArgsConstructor
+public class TestData implements Trackable {
+  private String trackingId;
+  private String id;
+  private int foo;
+}
+```
+
+You can use one trackingId for multiple operations on cluster or for a chain running:
+
+```java
+Collection<ChainResult<String>> results = Chain.of(cluster)
+  .track(trackingId)
+  .map(ChainBean1.class, "Chain argument")       // Start chain with string argument
+  .filter(r -> r.getResult() == 1)               // Continue chain only for odd nodes
+  .map(ChainBean2.class)                         // On even nodes create a string result
+  .run();                                        // Run chain steps
+
+```  
+
+**Working application example: [example-04](https://github.com/technologicgroup/cluster-boost/tree/master/examples/example-03)** 
+  
