@@ -5,11 +5,11 @@ Full Spring-integrated solution for Ignite cluster that helps to implement your 
 
 ## Main features
 
-- [Cluster ready event](#1-cluster-ready-event)
-- [Self registered repositories](#2-self-registered-repositories)
-- [Run Spring beans as a cluster tasks](#3-run-spring-beans-as-a-cluster-tasks)
-- [Chain running](#4-chain-running)
-- [Audit](#5-audit)
+1. [Cluster ready event](#1-cluster-ready-event)
+1. [Self registered repositories](#2-self-registered-repositories)
+1. [Run Spring beans as a cluster tasks](#3-run-spring-beans-as-a-cluster-tasks)
+1. [Chain running](#4-chain-running)
+1. [Audit](#5-audit)
 
 ## Maven dependency
 
@@ -224,5 +224,5 @@ Collection<ChainResult<String>> results = Chain.of(cluster)
 
 ```  
 
-**Working application example: [example-04](https://github.com/technologicgroup/cluster-boost/tree/master/examples/example-03)** 
+**Working application example: [example-04](https://github.com/technologicgroup/cluster-boost/tree/master/examples/example-04)** 
   
