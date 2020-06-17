@@ -71,6 +71,14 @@ public class ClusterReadyConsumer implements ApplicationListener<ClusterReadyEve
 }
 ```
 
+You need to specify all nodes in the **application.properties** file to let system know what nodes you expect in the cluster.
+In the following example cluster will expect 2 nodes from localhost:
+
+```
+cluster.hosts=localhost:47500..47509,localhost:47500..47509
+```
+
+
 ## 2. Self registered repositories
 
 To define a memory cache you need to define just one repository class

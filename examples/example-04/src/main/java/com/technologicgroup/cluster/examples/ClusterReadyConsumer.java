@@ -31,8 +31,8 @@ public class ClusterReadyConsumer implements ApplicationListener<ClusterReadyEve
 
     if (cluster.isFirstNode()) {
       Collection<ChainResult<String>> results = Chain.of(cluster)
-          .track(trackingId)
-          .map(ChainBean1.class, "Chain argument")  // Start chain with string argument
+          .track(trackingId)                             // Track all chain steps with trackingId
+          .map(ChainBean1.class, "Chain argument")       // Start chain with string argument
           .filter(r -> r.getResult() == 1)               // Continue chain only for odd nodes
           .map(ChainBean2.class)                         // On even nodes create a string result
           .run();                                        // Run chain steps
