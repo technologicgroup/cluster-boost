@@ -203,7 +203,7 @@ private final AuditService auditService;
 All running beans will be tracked by default with random UUID, but you can specify it by implementing Trackable interface for bean arguments:
 
 ```java
-import lombok.AllArgsConstructor;@Data
+@Data
 @AllArgsConstructor
 public class TestData implements Trackable {
   private String trackingId;
@@ -212,11 +212,12 @@ public class TestData implements Trackable {
 }
 ```
 
-You can use one trackingId for multiple operations on cluster or for a chain running:
+All tracked data will be stored in the automatically created Ignite cache and will be accessible with **AuditService** by trackingId
+You can use one **trackingId** for multiple operations on the cluster or for a chain running:
 
 ```java
 Collection<ChainResult<String>> results = Chain.of(cluster)
-  .track(trackingId)
+  .track(trackingId)                             // Track all chain steps with trackingId
   .map(ChainBean1.class, "Chain argument")       // Start chain with string argument
   .filter(r -> r.getResult() == 1)               // Continue chain only for odd nodes
   .map(ChainBean2.class)                         // On even nodes create a string result
