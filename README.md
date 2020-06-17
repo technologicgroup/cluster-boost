@@ -182,7 +182,7 @@ of previuos step from Line 3 (**TaskBean** result).
 
 **Working application example: [example-03](https://github.com/technologicgroup/cluster-boost/tree/master/examples/example-03)** 
 
-## Audit
+## 5. Audit
 
 To track running beans on cluster substitute common library with audit version
 
