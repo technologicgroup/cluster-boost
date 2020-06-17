@@ -71,13 +71,23 @@ public class ClusterReadyConsumer implements ApplicationListener<ClusterReadyEve
 }
 ```
 
-You need to specify all nodes in the **application.properties** file to let system know what nodes you expect in the cluster.
+You need to specify all expected nodes in the **application.properties** file.
+
 In the following example cluster will expect 2 nodes from localhost:
 
 ```
 cluster.hosts=localhost:47500..47509,localhost:47500..47509
 ```
 
+You can also specify a timeout in mills for the cluster activation. 
+
+If at least one node will not enter the cluster timeout Exception will be thrown.
+
+```
+#cluster.startupTimeout=20000
+```
+
+By default timeout is 60000 mills.
 
 ## 2. Self registered repositories
 
