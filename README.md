@@ -84,12 +84,12 @@ You can also specify a timeout in mills for the cluster activation.
 If at least one node will not enter the cluster timeout Exception will be thrown.
 
 ```
-#cluster.startupTimeout=20000
+cluster.startupTimeout=20000
 ```
 
 By default timeout is 60000 mills.
 
-## 2. Self registered repositories
+## 2. Self-registered repositories
 
 To define a memory cache you need to define just one repository class
 
@@ -119,7 +119,7 @@ public class TestAccessor extends CommonDataAccessor<TestKey, TestValue> {
 
 **Working application example: [example-01](https://github.com/technologicgroup/cluster-boost/tree/master/examples/example-01)** 
 
-## 3. Run Spring beans as a cluster tasks
+## 3. Run Spring beans as a cluster task
 
 You do not need to define some special classes for a cluster tasks anymore.
 If you want to run some code on every cluster node with a parameter you just need to define one Spring bean class
