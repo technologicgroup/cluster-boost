@@ -1,4 +1,4 @@
-# cluster-boost library v. 1.0
+# cluster-boost library v. 1.0 for Ignite
 
 ## Description
 Full Spring-integrated solution for Ignite cluster that helps to implement your first flexible Ignite cluster easily.
@@ -45,7 +45,7 @@ Full Spring-integrated solution for Ignite cluster that helps to implement your 
 
 ## 1. Cluster ready event
 
-Cluster have set of nodes hosted on different hosts.
+Ignite cluster have set of nodes hosted on different hosts.
 
 Nodes are entering cluster not at the same time but Ignite 
 allows you to use cluster even when not all nodes in the cluster 
