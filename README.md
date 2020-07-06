@@ -6,7 +6,7 @@ Full Spring-integrated solution for Ignite cluster that helps to implement your 
 ## Main features
 
 1. [Cluster ready event](#1-cluster-ready-event)
-1. [Self registered repositories](#2-self-registered-repositories)
+1. [Self-registered repositories](#2-self-registered-repositories)
 1. [Run Spring beans as a cluster tasks](#3-run-spring-beans-as-a-cluster-tasks)
 1. [Chain running](#4-chain-running)
 1. [Audit](#5-audit)
