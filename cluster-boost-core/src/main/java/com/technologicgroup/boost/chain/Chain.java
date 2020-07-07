@@ -4,7 +4,9 @@ import com.technologicgroup.boost.core.Cluster;
 import com.technologicgroup.boost.core.ClusterGroup;
 import com.technologicgroup.boost.core.ClusterTask;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,11 +24,20 @@ import java.util.List;
 public class Chain {
 
   private final Cluster cluster;
-  private String trackingId;
-  ClusterGroup clusterGroup;
-  Object arg;
 
-  List<ChainStep<?, ?>> steps = new ArrayList<>();
+  @Getter
+  private String trackingId;
+
+  @Setter(AccessLevel.PACKAGE)
+  @Getter(AccessLevel.PACKAGE)
+  private ClusterGroup clusterGroup;
+
+  @Setter(AccessLevel.PACKAGE)
+  @Getter(AccessLevel.PACKAGE)
+  private Object arg;
+
+  @Getter(AccessLevel.PACKAGE)
+  private final List<ChainStep<?, ?>> steps = new ArrayList<>();
 
   /**
    * Static constructor of Chain object

@@ -63,9 +63,10 @@ public class ChainStep<A, R> {
    * @return the next chain step
    */
   public <Res, NR> ChainStep<Res, NR> reduce(Function<Collection<R>, Res> function) {
-    chain.arg = collect(function);
+    chain.setArg(collect(function));
     ChainStep<Res, NR> step = new ChainStep<>(null, chain);
-    chain.steps.add(step);
+    chain.getSteps().clear();
+    chain.getSteps().add(step);
     return step;
   }
 
@@ -81,9 +82,10 @@ public class ChainStep<A, R> {
    */
   public <Any, Res, T extends ClusterTask<Any, Res>> ChainStep<Any, Res> reduce(Class<T> bean) {
     chain.run();
-    chain.arg = null;
+    chain.setArg(null);
     ChainStep<Any, Res> step = new ChainStep<>(bean, chain);
-    chain.steps.add(step);
+    chain.getSteps().clear();
+    chain.getSteps().add(step);
     return step;
   }
 
@@ -101,9 +103,10 @@ public class ChainStep<A, R> {
    */
   public <Res, NR, T extends ClusterTask<Res, NR>> ChainStep<Res, NR> reduce(Function<Collection<R>, Res> function,
                                                                              Class<T> bean) {
-    chain.arg = collect(function);
+    chain.setArg(collect(function));
     ChainStep<Res, NR> step = new ChainStep<>(bean, chain);
-    chain.steps.add(step);
+    chain.getSteps().clear();
+    chain.getSteps().add(step);
     return step;
   }
 
@@ -116,7 +119,7 @@ public class ChainStep<A, R> {
    */
   public <Res, T extends ClusterTask<R, Res>> ChainStep<R, Res> map(Class<T> bean) {
     ChainStep<R, Res> step = new ChainStep<>(bean, chain);
-    chain.steps.add(step);
+    chain.getSteps().add(step);
     return step;
   }
 
@@ -137,8 +140,8 @@ public class ChainStep<A, R> {
         .map(ChainResult::getNodeId)
         .collect(Collectors.toSet());
 
-    chain.clusterGroup = new ClusterGroup(nodeList);
-    chain.arg = results;
+    chain.setClusterGroup(new ClusterGroup(nodeList));
+    chain.setArg(results);
 
     return map(ChainFilterBean.class);
   }
