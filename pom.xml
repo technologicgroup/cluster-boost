@@ -7,7 +7,7 @@
     <groupId>com.technologicgroup.cluster</groupId>
     <artifactId>cluster-boost</artifactId>
     <packaging>pom</packaging>
-    <version>0.1</version>
+    <version>1.1</version>
 
     <repositories>
         <repository>
@@ -36,7 +36,10 @@
         <target.version>1.8</target.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <core.version>1.0</core.version>
+        <core.version>1.1</core.version>
+        <junit.version>5.0.0-ALPHA</junit.version>
+        <mockito.version>2.23.4</mockito.version>
+        <assertj.version>3.16.1</assertj.version>
         <ignite.version>8.7.10</ignite.version>
     </properties>
 

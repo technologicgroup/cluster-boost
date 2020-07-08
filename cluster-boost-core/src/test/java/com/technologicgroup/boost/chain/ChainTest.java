@@ -9,8 +9,14 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ChainTest {
@@ -63,8 +69,34 @@ public class ChainTest {
   }
 
   @Test
-  public void testRun_OK() {
+  public void testRunClusterGroup_OK() {
+    ClusterGroup clusterGroup = new ClusterGroup(Collections.singleton(UUID.randomUUID().toString()));
 
+    Chain chain = Chain.of(cluster);
+    chain.on(clusterGroup);
+    chain.run();
+
+    verify(cluster, times(1)).runBean(eq(clusterGroup), eq(ChainBean.class), any());
+  }
+
+  @Test
+  public void testRunEmptyClusterGroup_OK() {
+    ClusterGroup clusterGroup = new ClusterGroup(Collections.emptySet());
+
+    Chain chain = Chain.of(cluster);
+    chain.on(clusterGroup);
+    Collection<?> result = chain.run();
+
+    verify(cluster, times(0)).runBean(eq(clusterGroup), eq(ChainBean.class), any());
+    Assert.assertEquals(0, result.size());
+  }
+
+  @Test
+  public void testRun_OK() {
+    Chain chain = Chain.of(cluster);
+    chain.run();
+
+    verify(cluster, times(1)).runBean(eq(ChainBean.class), any());
   }
 
 }

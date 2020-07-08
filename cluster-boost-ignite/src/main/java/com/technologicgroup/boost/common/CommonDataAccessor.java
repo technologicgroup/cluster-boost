@@ -63,8 +63,8 @@ public abstract class CommonDataAccessor<K, V> implements ClusterDataAccessor<K,
    */
   @Override
   public void put(K key, V value) {
-        repository.put(key, value);
-    }
+    repository.put(key, value);
+  }
 
   /**
    * Puts a key/value pair map to the repository associated with a service.
@@ -84,7 +84,7 @@ public abstract class CommonDataAccessor<K, V> implements ClusterDataAccessor<K,
    */
   @Override
   public Map<K, V> find(Predicate<V> predicate) {
-    ScanQuery<K,V> query = new ScanQuery<>((k, v) -> predicate.test(v));
+    ScanQuery<K, V> query = new ScanQuery<>((k, v) -> predicate.test(v));
 
     try (QueryCursor<Cache.Entry<K, V>> cursor = repository.cache().query(query)) {
       return Stream.of(cursor.getAll())
