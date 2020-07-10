@@ -35,13 +35,13 @@ Full Spring-integrated solution for Ignite cluster that helps to implement your 
 
 ## Examples
 
-1. [example-01](https://github.com/technologicgroup/cluster-boost/tree/master/examples/example-01) - cluster ready event, self-registered repositories 
+1. [example-01](https://github.com/technologicgroup/cluster-boost-examples/tree/master/examples/example-01) - cluster ready event, self-registered repositories 
 
-1. [example-02](https://github.com/technologicgroup/cluster-boost/tree/master/examples/example-02) - run Spring bean as a cluster task  
+1. [example-02](https://github.com/technologicgroup/cluster-boost-examples/tree/master/examples/example-02) - run Spring bean as a cluster task  
 
-1. [example-03](https://github.com/technologicgroup/cluster-boost/tree/master/examples/example-03) - chain running   
+1. [example-03](https://github.com/technologicgroup/cluster-boost-examples/tree/master/examples/example-03) - chain running   
 
-1. [example-04](https://github.com/technologicgroup/cluster-boost/tree/master/examples/example-04) - chain running with audit
+1. [example-04](https://github.com/technologicgroup/cluster-boost-examples/tree/master/examples/example-04) - chain running with audit
 
 ## 1. Cluster ready event
 
@@ -117,7 +117,7 @@ public class TestAccessor extends CommonDataAccessor<TestKey, TestValue> {
 }
 ```
 
-**Working application example: [example-01](https://github.com/technologicgroup/cluster-boost/tree/master/examples/example-01)** 
+**Working application example: [example-01](https://github.com/technologicgroup/cluster-boost-examples/tree/master/examples/example-01)** 
 
 ## 3. Run Spring beans as a cluster task
 
@@ -149,7 +149,7 @@ Result from every node will be collected to the collection of results.
 In the task bean you can easily autowire any Spring bean you want 
 (f.e. a repository to access local data) without any troubles. 
 
-**Working application example: [example-02](https://github.com/technologicgroup/cluster-boost/tree/master/examples/example-02)** 
+**Working application example: [example-02](https://github.com/technologicgroup/cluster-boost-examples/tree/master/examples/example-02)** 
 
 ## 4. Chain running
 
@@ -198,7 +198,7 @@ of previuos step from Line 3 (**TaskBean** result).
 
 ### Line 5 - collect results  
 
-**Working application example: [example-03](https://github.com/technologicgroup/cluster-boost/tree/master/examples/example-03)** 
+**Working application example: [example-03](https://github.com/technologicgroup/cluster-boost-examples/tree/master/examples/example-03)** 
 
 ## 5. Audit
 
@@ -243,5 +243,5 @@ Collection<ChainResult<String>> results = Chain.of(cluster)
 
 ```  
 
-**Working application example: [example-04](https://github.com/technologicgroup/cluster-boost/tree/master/examples/example-04)** 
+**Working application example: [example-04](https://github.com/technologicgroup/cluster-boost-examples/tree/master/examples/example-04)** 
   
