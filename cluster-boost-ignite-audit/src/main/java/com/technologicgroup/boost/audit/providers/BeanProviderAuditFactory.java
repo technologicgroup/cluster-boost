@@ -49,7 +49,7 @@ public class BeanProviderAuditFactory implements BeanProviderFactory {
    */
   @Override
   public <A, R, T extends ClusterTask<A, R>> IgniteCallable<R> getTask(Class<T> bean, A arg) {
-    BeanProviderTask<A, R, T> provider = new BeanProviderTask<>(bean, arg);
+    BeanProviderAuditTask<A, R, T> provider = new BeanProviderAuditTask<>(bean, arg);
 
     String trackingId;
     if (arg instanceof Trackable) {

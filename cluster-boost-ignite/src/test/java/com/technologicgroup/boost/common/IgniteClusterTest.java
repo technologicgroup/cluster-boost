@@ -5,7 +5,6 @@ import com.technologicgroup.boost.core.ClusterGroup;
 import com.technologicgroup.boost.mock.TestClusterJob;
 import com.technologicgroup.boost.mock.TestClusterTask;
 import com.technologicgroup.boost.mock.TestRunnableBean;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCompute;
 import org.apache.ignite.cluster.ClusterNode;
@@ -24,7 +23,6 @@ import java.util.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@Slf4j
 @RunWith(MockitoJUnitRunner.class)
 public class IgniteClusterTest {
 
@@ -119,7 +117,7 @@ public class IgniteClusterTest {
   }
 
   @Test
-  @SuppressWarnings({"unchecked", "rawusage"})
+  @SuppressWarnings("unchecked")
   public void testRunBean_OK() {
     when(ignite.compute()).thenReturn(igniteCompute);
     when(beanFactory.getJob(TestClusterJob.class)).thenReturn((IgniteCallable<Integer>) () -> null);

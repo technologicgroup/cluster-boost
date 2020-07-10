@@ -1,6 +1,5 @@
 package com.technologicgroup.boost.common;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.ignite.Ignite;
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,16 +12,17 @@ import org.springframework.context.ApplicationContext;
 
 import static org.mockito.Mockito.when;
 
-@Slf4j
 @RunWith(MockitoJUnitRunner.class)
 public class ContextHolderTest {
 
+  @SuppressWarnings("unused")
   @InjectMocks
   private ContextHolder contextHolder;
 
   @Mock
   private Ignite ignite;
 
+  @SuppressWarnings("unused")
   @Mock
   private ApplicationContext context;
 
@@ -34,9 +34,6 @@ public class ContextHolderTest {
   @Before
   public void setUp() {
     cluster = new IgniteCluster(ignite, null, 0, null);
-
-    log.info("{}", contextHolder.toString());
-    log.info("{}", context.toString());
   }
 
   @Test

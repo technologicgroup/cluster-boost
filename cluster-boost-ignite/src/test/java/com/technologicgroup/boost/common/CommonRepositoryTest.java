@@ -1,6 +1,5 @@
 package com.technologicgroup.boost.common;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.configuration.CacheConfiguration;
@@ -15,13 +14,14 @@ import org.springframework.context.ApplicationContext;
 
 import static org.mockito.Mockito.*;
 
-@Slf4j
 @RunWith(MockitoJUnitRunner.class)
 public class CommonRepositoryTest {
 
+  @SuppressWarnings("unused")
   @InjectMocks
   private ContextHolder contextHolder;
 
+  @SuppressWarnings("unused")
   @Mock
   private CacheConfiguration<Integer, Integer> configuration;
 
@@ -51,9 +51,6 @@ public class CommonRepositoryTest {
     when(context.getBean(Ignite.class)).thenReturn(ignite);
     when(ignite.cluster()).thenReturn(igniteCluster);
     when(ignite.cache(any())).thenReturn((IgniteCache<Object, Object>) cache);
-
-    log.info("{}", contextHolder.toString());
-    log.info("{}", configuration.toString());
   }
 
   @Test

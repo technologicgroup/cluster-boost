@@ -14,7 +14,7 @@ import org.apache.ignite.lang.IgniteCallable;
  */
 @Slf4j
 @RequiredArgsConstructor
-class BeanProviderTask<A, R, T extends ClusterTask<A, R>> extends BeanProviderAudit<R, T> implements IgniteCallable<R> {
+class BeanProviderAuditTask<A, R, T extends ClusterTask<A, R>> extends BeanProviderAudit<R, T> implements IgniteCallable<R> {
   private final Class<T> beanClass;
   private final A arg;
 
@@ -30,6 +30,10 @@ class BeanProviderTask<A, R, T extends ClusterTask<A, R>> extends BeanProviderAu
 
   @Override
   protected R runBean() {
-    return getBean(beanClass).run(arg);
+    T bean = getBean(beanClass);
+    if (bean == null) {
+      throw new RuntimeException("Job execution failed. " + beanClass + " not found");
+    }
+    return bean.run(arg);
   }
 }

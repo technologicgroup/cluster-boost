@@ -27,7 +27,11 @@ class BeanProviderAuditRunnable<T extends Runnable> extends BeanProviderAudit<Vo
 
   @Override
   protected Void runBean() {
-    getBean(beanClass).run();
+    T bean = getBean(beanClass);
+    if (bean == null) {
+      throw new RuntimeException("Job execution failed. " + beanClass + " not found");
+    }
+    bean.run();
     return null;
   }
 }

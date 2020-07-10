@@ -28,8 +28,7 @@ class BeanProviderTask<A, R, T extends ClusterTask<A, R>> implements IgniteCalla
     try {
       T bean = getBean();
       if (bean == null) {
-        log.warn("Job execution failed. {} not found", beanClass);
-        return null;
+        throw new RuntimeException("Job execution failed. " + beanClass + " not found");
       }
       return bean.run(arg);
     } catch (Exception e) {

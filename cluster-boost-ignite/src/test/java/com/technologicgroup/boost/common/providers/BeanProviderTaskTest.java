@@ -14,6 +14,7 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BeanProviderTaskTest {
+
   @InjectMocks
   private ContextHolder contextHolder;
 
@@ -33,7 +34,7 @@ public class BeanProviderTaskTest {
     Assert.assertEquals(10, result.longValue());
   }
 
-  @Test
+  @Test(expected = RuntimeException.class)
   public void testCall_run_bean_notFound() {
     provider = new BeanProviderTask<>(TestClusterTask.class, "10");
 
