@@ -1,7 +1,11 @@
-# cluster-boost library v. 1.0 for Ignite
+# cluster-boost library v. 1.1 for Ignite
 
 ## Description
 Full Spring-integrated solution for Ignite cluster that helps to implement your first flexible Ignite cluster easily.
+
+## Release 1.1 notes 
+1. Fix for `Chain.reduce` functionality
+1. Change bean providers behavior. If bean provider can't inject a bean, `RuntimeException` will be thrown. 
 
 ## Main features
 
@@ -19,7 +23,7 @@ Full Spring-integrated solution for Ignite cluster that helps to implement your 
 <dependency>
     <groupId>com.technologicgroup.cluster</groupId>
     <artifactId>cluster-boost-ignite</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 </dependency>
 ```
 
@@ -29,7 +33,7 @@ Full Spring-integrated solution for Ignite cluster that helps to implement your 
 <dependency>
     <groupId>com.technologicgroup.cluster</groupId>
     <artifactId>cluster-boost-ignite-audit</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 </dependency>
 ```
 
@@ -208,7 +212,7 @@ To track running beans on cluster substitute common library with audit version
 <dependency>
     <groupId>com.technologicgroup.cluster</groupId>
     <artifactId>cluster-boost-ignite-audit</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 </dependency>
 ```
 
