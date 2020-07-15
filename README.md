@@ -49,6 +49,8 @@ Full Spring-integrated solution for Ignite cluster that helps to implement your 
 
 1. [example-04](https://github.com/technologicgroup/cluster-boost-examples/tree/master/example-04) - chain running with audit
 
+[Full list of examples](https://github.com/technologicgroup/cluster-boost)
+
 ## 1. Cluster ready event
 
 Ignite cluster have set of nodes hosted on different hosts.
