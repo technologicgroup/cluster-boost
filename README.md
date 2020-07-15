@@ -41,6 +41,8 @@ Full Spring-integrated solution for Ignite cluster that helps to implement your 
 
 ## Examples
 
+### [Examples repository](https://github.com/technologicgroup/cluster-boost-examples)
+
 1. [example-01](https://github.com/technologicgroup/cluster-boost-examples/tree/master/example-01) - cluster ready event, self-registered repositories 
 
 1. [example-02](https://github.com/technologicgroup/cluster-boost-examples/tree/master/example-02) - run Spring bean as a cluster task  
@@ -49,7 +51,6 @@ Full Spring-integrated solution for Ignite cluster that helps to implement your 
 
 1. [example-04](https://github.com/technologicgroup/cluster-boost-examples/tree/master/example-04) - chain running with audit
 
-[Full list of examples](https://github.com/technologicgroup/cluster-boost)
 
 ## 1. Cluster ready event
 
