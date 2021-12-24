@@ -1,4 +1,4 @@
-# cluster-boost library for Ignite
+# Spring friendly cluster library for Ignite
 
 ## Version 1.1
 
